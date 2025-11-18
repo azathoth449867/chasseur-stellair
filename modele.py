@@ -2,14 +2,16 @@ import random
 
 # ------------------ CLASSES ------------------
 
+
 class Projectile:
-    def __init__(self, x, y):
+    def __init__(self, x, y,):
         self.x = x
         self.y = y
         self.vitesse = -10  # vers le haut
         self.taille_x = 2
         self.taille_y = 10
         self.goodBad = "g"
+        self.alive = True
 
     def mise_a_jour(self):
         self.y += self.vitesse
@@ -39,7 +41,7 @@ class Vaisseau:
 
         self.projectiles = [
             p for p in self.projectiles
-            if p.y > 0
+            if p.y > 0 and p.alive
         ]
 
 
@@ -86,12 +88,17 @@ class Modele:
         self.vaisseau.tirer()
     def mise_a_jour(self):
         self.vaisseau.mise_a_jour()
+        
         for p in self.vaisseau.projectiles:
             if p.goodBad == "g":
                 for o in self.ovnis:
-                    if p.x <= o.x + o.taille_x / 2 + 10 and p.x >= o.x - o.taille_x / 2 + 10:
-                        if p.y - p.taille_y / 2 <= o.y + o.taille_y and not p.y + p.taille_y / 2 <= o.y - o.taille_y / 2:
+                    if p.x <= o.x + o.taille_x and p.x >= o.x - o.taille_x:
+                        if p.y - p.taille_y <= o.y + o.taille_y:
                             print("toucher", p.x, p.y)
+                            p.alive = False
+                            
+            
+        
                 
             
 
