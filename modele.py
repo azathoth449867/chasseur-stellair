@@ -29,7 +29,8 @@ class Vaisseau:
         self.taille_y = 15
 
     def deplacer(self, x):
-        self.x = x
+        self.x += (x - self.x) * 0.06
+
     def tirer(self):
         nouveau_proj = Projectile(self.x, self.y - 20, "g")
         self.projectiles.append(nouveau_proj)
