@@ -45,6 +45,7 @@ class Vue:
 
         # --- Vaisseau du joueur ---
         v = modele.vaisseau
+        o = modele.ovnis
         self.canevas.create_rectangle(
             v.x - v.taille_x,
             v.y - 5,
@@ -77,6 +78,16 @@ class Vue:
                 p.y,
                 fill="yellow"
             )
+        
+        for ovni in o:
+            for p in ovni.projectiles:
+                self.canevas.create_rectangle(
+                p.x - p.taille_x,
+                p.y - p.taille_y,
+                p.x + p.taille_x,
+                p.y,
+                fill="yellow"
+                )
 
         # --- OVNIs ---
         for o in modele.ovnis:

@@ -4,21 +4,20 @@ import random
 
 
 class Projectile:
-    def __init__(self, x, y,):
+    def __init__(self, x, y, typeBullet):
         self.x = x
         self.y = y
         self.vitesse = -10  # vers le haut
         self.taille_x = 2
         self.taille_y = 10
-        self.goodBad = "g"
+        self.goodBad = typeBullet
         self.alive = True
+
+        if self.goodBad == "b":
+            self.vitesse = 10
 
     def mise_a_jour(self):
         self.y += self.vitesse
-        
-
-    
-
 
 class Vaisseau:
     def __init__(self, x, y):
@@ -32,7 +31,7 @@ class Vaisseau:
     def deplacer(self, x):
         self.x = x
     def tirer(self):
-        nouveau_proj = Projectile(self.x, self.y - 20)
+        nouveau_proj = Projectile(self.x, self.y - 20, "g")
         self.projectiles.append(nouveau_proj)
 
     def mise_a_jour(self):
@@ -50,8 +49,17 @@ class OVNI:
         self.x = x
         self.y = y
         self.vy = vy
+        self.projectiles = []
         self.taille_x = 12
         self.taille_y = 6
+
+    def tirer(self):
+        nouveau_proj = Projectile(self.x, self.y + 20, "b")
+        self.projectiles.append(nouveau_proj)
+
+    def mouvement_projectile(self):
+        for p in self.projectiles: 
+            p.mise_a_jour()
 
     def mise_a_jour(self):
         self.y += self.vy
@@ -127,6 +135,16 @@ class Modele:
 
         for a in self.asteroides:
             a.mise_a_jour()
+
+        # Les ennemis tirent
+        for o in self.ovnis:
+            alea_frequence = random.random()
+            if alea_frequence < 0.02:
+                o.tirer()
+                print("ovni tire")
+
+        for o in self.ovnis:
+            o.mouvement_projectile()
 
         # Nettoyage des objets sortis de l'écran
         self.ovnis = [
