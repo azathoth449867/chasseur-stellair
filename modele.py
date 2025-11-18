@@ -61,8 +61,15 @@ class OVNI:
         for p in self.projectiles: 
             p.mise_a_jour()
 
+       
+
     def mise_a_jour(self):
         self.y += self.vy
+        self.projectiles = [
+                    p for p in self.projectiles
+                    if p.y < 700 and p.alive
+                ]
+        
 
 
 class Asteroide:
@@ -102,9 +109,14 @@ class Modele:
                 for o in self.ovnis:
                     if p.x <= o.x + o.taille_x and p.x >= o.x - o.taille_x:
                         if p.y - p.taille_y <= o.y + o.taille_y:
-                            print("toucher", p.x, p.y)
                             p.alive = False
-                            
+
+        for o in self.ovnis:
+            for p in o.projectiles:
+                        if p.x <= self.vaisseau.x + self.vaisseau.taille_x and p.x >= self.vaisseau.x - self.vaisseau.taille_x:
+                            if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y:
+                                p.alive = False
+                                print("1")
             
         
                 
@@ -141,7 +153,7 @@ class Modele:
             alea_frequence = random.random()
             if alea_frequence < 0.02:
                 o.tirer()
-                print("ovni tire")
+                
 
         for o in self.ovnis:
             o.mouvement_projectile()
