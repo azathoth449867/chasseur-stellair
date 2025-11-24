@@ -94,15 +94,30 @@ class Modele:
         self.asteroides = []
         self.score = 0
         self.niveau = 1
+        self.round = 1
+        self.frames = 0
+        self.apparationRate = 0.02
         self.souris_x, self.souris_y = 0, 0
 
     def deplacer_vaisseau(self,x, y):
         self.souris_x, self.souris_y = x, y
     def tirer(self):
         self.vaisseau.tirer()
+    def incrementer_jeu(self):
+        self.frames += 1 * 0.03
+        if self.frames >= 5:
+            self.frames = 0
+            self.round += 1
+            print("round: ", self.round)
+        if self.round > 3:
+            self.round = 1
+            self.niveau += 1
+            print("niveau:", self.niveau)
+        self.apparationRate = 0.02 * (self.round * 0.5 + self.niveau)
+    
     def mise_a_jour(self):
         self.vaisseau.mise_a_jour()
-        
+        self.incrementer_jeu()
         #Verifie si projectile vaisseau touche ovnis
         for p in self.vaisseau.projectiles:
             if p.goodBad == "g":
@@ -110,7 +125,7 @@ class Modele:
                     if p.x <= o.x + o.taille_x and p.x >= o.x - o.taille_x:
                         if p.y - p.taille_y <= o.y + o.taille_y:
                             o.hp -= p.dommage #hp ovnis - dommage projectile
-                            print("hp ovnis" , o.hp)
+                            
                             p.alive = False
 
         #Vérifie si projectile ovnis touche vaisseau
@@ -120,7 +135,7 @@ class Modele:
                             if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y:
                                 p.alive = False
                                 self.vaisseau.hp -= p.dommage #hp vaisseau - dommage projectile
-                                print("hp vaisseau" , self.vaisseau.hp)
+                
 
         #Verifie si projectile vaisseau touche asteroides
         for p in self.vaisseau.projectiles:
@@ -136,14 +151,14 @@ class Modele:
                 o.x >= self.vaisseau.x - self.vaisseau.taille_x):
                 if (o.y + o.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and 
                     o.y - o.taille_y <= self.vaisseau.y + self.vaisseau.taille_y):
-                    print("collision")
+                    pass
 
         # Vaisseau déplace vers souris même sans mouvement de souris
         self.vaisseau.deplacer(self.souris_x, self.souris_y)
                 
         # Apparition aléatoire des ennemis
         alea_ovni = random.random()
-        if alea_ovni < 0.02:
+        if alea_ovni < self.apparationRate:
             nouvel_ovni = OVNI(
                 random.randint(0, self.largeur),
                 0,
