@@ -93,12 +93,25 @@ class Modele:
         self.asteroides = []
         self.score = 0
         self.niveau = 1
+        self.round = 1
+        self.frames = 0
+        self.souris_x, self.souris_y = 0, 0
 
     def deplacer_vaisseau(self,x):
         self.vaisseau.deplacer(x)
     def tirer(self):
         self.vaisseau.tirer()
+    def incrementer_jeu(self):
+        self.frames += 1 * 0.03
+        if self.frames >= 5:
+            self.frames = 0
+            self.round += 1
+        if self.round > 4:
+            self.round = 0
+            self.niveau += 1
+    
     def mise_a_jour(self):
+        self.incrementer_jeu()
         self.vaisseau.mise_a_jour()
         for p in self.vaisseau.projectiles:
             if p.goodBad == "g":
