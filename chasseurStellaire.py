@@ -24,6 +24,5 @@ class Controleur:
         self.modele = Modele(self,600,800)
         self.vue.modele = self.modele
 
-
 if __name__ == "__main__":
     c = Controleur()

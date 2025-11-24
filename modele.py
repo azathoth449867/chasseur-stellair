@@ -94,7 +94,6 @@ class Modele:
         self.souris_x, self.souris_y = 0, 0
 
     def deplacer_vaisseau(self,x, y):
-        self.vaisseau.deplacer(x, y)
         self.souris_x, self.souris_y = x, y
     def tirer(self):
         self.vaisseau.tirer()

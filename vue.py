@@ -11,7 +11,6 @@ class Vue:
         self.creer_frame_canevas()
         self.creer_frame_infos()
 
-
     # ---------- Création de l'interface ----------
     def creer_fenetre_principale(self):
         self.frame_principale = tk.Frame(self.root)
