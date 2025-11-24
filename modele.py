@@ -7,6 +7,7 @@ class Projectile:
         self.x = x
         self.y = y
         self.vitesse = -10  # vers le haut
+        self.dommage = 5 # dommange de base
         self.taille_x = 2
         self.taille_y = 10
         self.goodBad = typeBullet
@@ -26,6 +27,7 @@ class Vaisseau:
         self.projectiles = []
         self.taille_x = 15
         self.taille_y = 15
+        self.hp = 10
 
     def deplacer(self, x, y):
         self.x += (x - self.x) * 0.09
@@ -52,6 +54,7 @@ class OVNI:
         self.projectiles = []
         self.taille_x = 12
         self.taille_y = 6
+        self.hp = 10
 
     def tirer(self):
         nouveau_proj = Projectile(self.x, self.y + 20, "b")
@@ -100,21 +103,26 @@ class Modele:
     def mise_a_jour(self):
         self.vaisseau.mise_a_jour()
         
+        #Verifie si projectile vaisseau touche ovnis
         for p in self.vaisseau.projectiles:
             if p.goodBad == "g":
                 for o in self.ovnis:
                     if p.x <= o.x + o.taille_x and p.x >= o.x - o.taille_x:
                         if p.y - p.taille_y <= o.y + o.taille_y:
+                            o.hp -= p.dommage #hp ovnis - dommage projectile
+                            print("hp ovnis" , o.hp)
                             p.alive = False
 
+        #Vérifie si projectile ovnis touche vaisseau
         for o in self.ovnis:
             for p in o.projectiles:
                         if p.x <= self.vaisseau.x + self.vaisseau.taille_x and p.x >= self.vaisseau.x - self.vaisseau.taille_x:
                             if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y:
                                 p.alive = False
-                                print("1")
+                                self.vaisseau.hp -= p.dommage #hp vaisseau - dommage projectile
+                                print("hp vaisseau" , self.vaisseau.hp)
 
-
+        #Verifie si projectile vaisseau touche asteroides
         for p in self.vaisseau.projectiles:
             if p.goodBad == "g":
                 for a in self.asteroides:
@@ -122,9 +130,12 @@ class Modele:
                         if p.y - p.taille_y <= a.y + a.taille_y:
                             p.alive = False
 
+        #Vérifie si ovnis touche vaisseau
         for o in self.ovnis:
-            if o.x <= self.vaisseau.x + self.vaisseau.taille_x and o.x >= self.vaisseau.x - self.vaisseau.taille_x:
-                if o.y + o.taille_y >= self.vaisseau.y - self.vaisseau.taille_y:
+            if (o.x <= self.vaisseau.x + self.vaisseau.taille_x and 
+                o.x >= self.vaisseau.x - self.vaisseau.taille_x):
+                if (o.y + o.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and 
+                    o.y - o.taille_y <= self.vaisseau.y + self.vaisseau.taille_y):
                     print("collision")
 
         # Vaisseau déplace vers souris même sans mouvement de souris
