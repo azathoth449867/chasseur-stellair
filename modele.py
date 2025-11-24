@@ -95,8 +95,7 @@ class Modele:
 
     def deplacer_vaisseau(self,x, y):
         self.vaisseau.deplacer(x, y)
-        self.souris_x = x
-        self.souris_y = y
+        self.souris_x, self.souris_y = x, y
     def tirer(self):
         self.vaisseau.tirer()
     def mise_a_jour(self):
@@ -150,8 +149,7 @@ class Modele:
             alea_frequence = random.random()
             if alea_frequence < 0.02:
                 o.tirer()
-                
-
+    
         for o in self.ovnis:
             o.mouvement_projectile()
 
@@ -165,3 +163,4 @@ class Modele:
             a for a in self.asteroides
             if a.y < self.hauteur
         ]
+
