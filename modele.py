@@ -2,7 +2,6 @@ import random
 
 # ------------------ CLASSES ------------------
 
-
 class Projectile:
     def __init__(self, x, y, typeBullet):
         self.x = x
@@ -28,9 +27,10 @@ class Vaisseau:
         self.taille_x = 15
         self.taille_y = 15
 
-    def deplacer(self, x):
-        self.x += (x - self.x) * 0.06
-
+    def deplacer(self, x, y):
+        self.x += (x - self.x) * 0.09
+        self.y += (y - self.y) * 0.09
+        
     def tirer(self):
         nouveau_proj = Projectile(self.x, self.y - 20, "g")
         self.projectiles.append(nouveau_proj)
@@ -43,7 +43,6 @@ class Vaisseau:
             p for p in self.projectiles
             if p.y > 0 and p.alive
         ]
-
 
 class OVNI:
     def __init__(self, x, y, vy):
@@ -62,8 +61,6 @@ class OVNI:
         for p in self.projectiles: 
             p.mise_a_jour()
 
-       
-
     def mise_a_jour(self):
         self.y += self.vy
         self.projectiles = [
@@ -71,8 +68,6 @@ class OVNI:
                     if p.y < 700 and p.alive
                 ]
         
-
-
 class Asteroide:
     def __init__(self, x, y, vy):
         self.x = x
@@ -83,7 +78,6 @@ class Asteroide:
 
     def mise_a_jour(self):
         self.y += self.vy
-
 
 # ------------------ MODÈLE ------------------
 
@@ -97,9 +91,12 @@ class Modele:
         self.asteroides = []
         self.score = 0
         self.niveau = 1
+        self.souris_x, self.souris_y = 0, 0
 
-    def deplacer_vaisseau(self,x):
-        self.vaisseau.deplacer(x)
+    def deplacer_vaisseau(self,x, y):
+        self.vaisseau.deplacer(x, y)
+        self.souris_x = x
+        self.souris_y = y
     def tirer(self):
         self.vaisseau.tirer()
     def mise_a_jour(self):
@@ -118,11 +115,10 @@ class Modele:
                             if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y:
                                 p.alive = False
                                 print("1")
-            
-        
-                
-            
 
+        # Vaisseau déplace vers souris même sans mouvement de souris
+        self.vaisseau.deplacer(self.souris_x, self.souris_y)
+                
         # Apparition aléatoire des ennemis
         alea_ovni = random.random()
         if alea_ovni < 0.02:

@@ -14,8 +14,8 @@ class Controleur:
         self.vue.root.after(30, self.boucle_jeu)
 
     # Méthodes appelées par la Vue (via bindings)
-    def deplacer_vaisseau(self, x):
-        self.modele.deplacer_vaisseau(x)
+    def deplacer_vaisseau(self, x, y):
+        self.modele.deplacer_vaisseau(x, y)
 
     def tirer(self):
         self.modele.tirer()
