@@ -114,6 +114,19 @@ class Modele:
                                 p.alive = False
                                 print("1")
 
+
+        for p in self.vaisseau.projectiles:
+            if p.goodBad == "g":
+                for a in self.asteroides:
+                    if p.x <= a.x + a.taille_x and p.x >= a.x - a.taille_x:
+                        if p.y - p.taille_y <= a.y + a.taille_y:
+                            p.alive = False
+
+        for o in self.ovnis:
+            if o.x <= self.vaisseau.x + self.vaisseau.taille_x and o.x >= self.vaisseau.x - self.vaisseau.taille_x:
+                if o.y + o.taille_y >= self.vaisseau.y - self.vaisseau.taille_y:
+                    print("collision")
+
         # Vaisseau déplace vers souris même sans mouvement de souris
         self.vaisseau.deplacer(self.souris_x, self.souris_y)
                 
