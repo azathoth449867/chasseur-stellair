@@ -118,31 +118,13 @@ class Vue:
             )
 
         # --- Astéroïdes ---
-        # for a in modele.asteroides:
-        #     self.canevas.create_oval(
-        #         a.x - a.taille_x,
-        #         a.y - a.taille_y,
-        #         a.x + a.taille_x,
-        #         a.y + a.taille_y,
-        #         fill="darkred"
-        #     )
-
         for a in modele.asteroides:
-            items = []
-            core = self.canevas.create_oval(a.x - a.taille_x, a.y - a.taille_y, a.x + a.taille_x, a.y + a.taille_y, fill="darkred")
-            #self.canevas.create_oval(a.x - a.taille_x, a.y - a.taille_y, a.x + a.taille_x, a.y + a.taille_y, fill="darkred")
+            self.canevas.create_oval(a.x - a.taille_x, a.y - a.taille_y, a.x + a.taille_x, a.y + a.taille_y, fill="darkred")
+        
             self.canevas.create_line(a.x, a.y-18, a.x, a.y-12, fill="red", width=3)
             self.canevas.create_line(a.x, a.y+12, a.x, a.y+18, fill="red", width=3)
-            self.canevas.create_line(a.x-18, a.y, a.x-12, a.y, fill="red", width=3)
+            self.canevas.create_line(a.x - 18, a.y, a.x-12, a.y, fill="red", width=3)
             self.canevas.create_line(a.x+12, a.y, a.x+18, a.y, fill="red", width=3)
-            spikes = []
-            spikes.append(self.canevas.create_line(a.x, a.y-18, a.x, a.y-12, fill="red", width=3))
-            spikes.append(self.canevas.create_line(a.x, a.y+12, a.x, a.y+18, fill="red", width=3))
-            spikes.append(self.canevas.create_line(a.x-18, a.y, a.x-12, a.y, fill="red", width=3))
-            spikes.append(self.canevas.create_line(a.x+12, a.y, a.x+18, a.y, fill="red", width=3))
-            items = [core] + spikes
-            return items
-
 
         # --- Infos ---
         self.label_vie.config(text=f"Vies : {v.vie}")
