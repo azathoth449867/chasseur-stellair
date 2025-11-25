@@ -23,6 +23,11 @@ class Vue:
         # Bindings (la Vue gère le canevas)
         self.canevas.bind("<Motion>", self.deplacer_vaisseau)
         self.canevas.bind("<Button-1>", self.tirer)
+        self.canevas.bind("<ButtonRelease-1>", self.release)
+
+
+    def release(self, evt):
+        self.controleur.release()
 
     def creer_frame_infos(self):
         self.frame_infos = tk.Frame(self.frame_principale, bg="#222")

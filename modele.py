@@ -98,6 +98,7 @@ class Modele:
         self.frames = 0
         self.apparationRate = 0.02
         self.souris_x, self.souris_y = 0, 0
+        self.tire = None
 
     def deplacer_vaisseau(self,x, y):
         self.souris_x, self.souris_y = x, y

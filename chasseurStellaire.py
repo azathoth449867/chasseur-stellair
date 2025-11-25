@@ -17,8 +17,14 @@ class Controleur:
     def deplacer_vaisseau(self, x, y):
         self.modele.deplacer_vaisseau(x, y)
 
+    def release(self):
+        self.vue.root.after_cancel(self.modele.tire)
+        #self.modele.tire = None
+    
     def tirer(self):
         self.modele.tirer()
+        #if self.modele.tire == None:
+        self.modele.tire = self.vue.root.after(100, self.tirer)
 
     def rejouer(self):
         self.modele = Modele(self,600,800)
