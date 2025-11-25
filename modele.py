@@ -78,8 +78,8 @@ class Asteroide:
         self.x = x
         self.y = y
         self.vy = vy
-        self.taille_x = 10
-        self.taille_y = 10
+        self.taille_x = 12
+        self.taille_y = 12
         self.hp = 20
         self.dommage_collision = 5
 
