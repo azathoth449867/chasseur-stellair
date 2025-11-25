@@ -25,7 +25,6 @@ class Vue:
         self.canevas.bind("<Button-1>", self.tirer)
         self.canevas.bind("<ButtonRelease-1>", self.release)
 
-
     def release(self, evt):
         self.controleur.release()
 
@@ -47,6 +46,12 @@ class Vue:
 
         self.btn_rejouer = tk.Button(self.frame_infos, text="Rejouer", command=self.rejouer)
         self.btn_rejouer.pack(pady=10)
+
+    def creer_fenetre_intervalle(self, type):
+        if (type == "round"):
+                self.canevas.create_text(300,260,text=f"Round : {self.modele.round}", font=("Arial", 30, "bold"), fill="white")
+        if (type == "niveau"):
+            self.canevas.create_text(300,198,text=f"Niveau : {self.modele.niveau}", font=("Arial", 50, "bold"), fill="yellow")
 
     # ---------- Affichage du jeu ----------
     def afficher_jeu(self):
@@ -149,3 +154,9 @@ class Vue:
 
     def rejouer(self):
         self.controleur.rejouer()
+
+    # ---------- Affichage des intervalles ----------
+
+    def afficher_intervalle(self, type):
+        self.creer_fenetre_intervalle(type)
+

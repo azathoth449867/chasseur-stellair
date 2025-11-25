@@ -101,8 +101,11 @@ class Modele:
         self.round = 1
         self.frames = 0
         self.apparationRate = 0.02
-        self.souris_x, self.souris_y = 0, 0
+        self.souris_x, self.souris_y = 300, 600
         self.tire = None
+        self.enPause = False
+        self.pauseCompteur = 0
+        self.chronometre = None
 
     def deplacer_vaisseau(self,x, y):
         self.souris_x, self.souris_y = x, y
@@ -110,15 +113,30 @@ class Modele:
         self.vaisseau.tirer()
     def incrementer_jeu(self):
         self.frames += 1 * 0.03
-        if self.frames >= 5:
+        if self.frames >= 3:
             self.frames = 0
             self.round += 1
             print("round: ", self.round)
+            self.prochaine_round()
         if self.round > 3:
             self.round = 1
             self.niveau += 1
             print("niveau:", self.niveau)
+            self.prochain_niveau()
         self.apparationRate = 0.02 * (self.round * 0.5 + self.niveau)
+    
+    def pause_compteur(self):
+        self.pauseCompteur += 1 * 0.03
+        print(self.pauseCompteur)
+    
+    def prochaine_round(self):
+        self.enPause = True
+        self.parent.afficher_intervalle("round")
+        
+    def prochain_niveau(self):
+        self.enPause = True
+        self.parent.afficher_intervalle("niveau")
+        
     
     def mise_a_jour(self):
         self.vaisseau.mise_a_jour()
