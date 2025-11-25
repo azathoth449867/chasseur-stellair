@@ -54,7 +54,7 @@ class OVNI:
         self.vy = vy
         self.projectiles = []
         self.taille_x = 12
-        self.taille_y = 6
+        self.taille_y = 15
         self.hp = 10
         self.dommage_collision = 5
 

@@ -101,19 +101,27 @@ class Vue:
 
         # --- OVNIs ---
         for o in modele.ovnis:
-            self.canevas.create_rectangle(
+            self.canevas.create_oval(
                 o.x - o.taille_x,
                 o.y - o.taille_y,
                 o.x + o.taille_x,
-                o.y + o.taille_y,
+                o.y + 5,
                 fill="red"
             )
+            self.canevas.create_rectangle(
+                o.x - 20,
+                o.y + 5,
+                o.x + 20,
+                o.y + 10,
+                fill="silver"
+            )
+
             self.canevas.create_line(
                 o.x,
-                o.y + o.taille_y,
+                o.y - o.taille_y,
                 o.x,
-                o.y + o.taille_y + 6,
-                fill="orange",
+                o.y - 20,
+                fill="yellow",
                 width=2
             )
 
