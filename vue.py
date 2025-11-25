@@ -39,11 +39,11 @@ class Vue:
         self.label_niveau = tk.Label(self.frame_infos, text="Niveau : 1", fg="white", bg="#222", font=("Arial", 12))
         self.label_niveau.pack(pady=10)
 
-        self.label_niveau = tk.Label(self.frame_infos, text="Vagues : 1", fg="white", bg="#222", font=("Arial", 12))
-        self.label_niveau.pack(pady=10)
+        self.label_vague = tk.Label(self.frame_infos, text="Vagues : 1", fg="white", bg="#222", font=("Arial", 12))
+        self.label_vague.pack(pady=10)
 
-        self.label_niveau = tk.Label(self.frame_infos, text="Apparation Rate : 0.02", fg="white", bg="#222", font=("Arial", 12))
-        self.label_niveau.pack(pady=10)
+        self.label_apparationRate = tk.Label(self.frame_infos, text="Apparation Rate : 0.02", fg="white", bg="#222", font=("Arial", 12))
+        self.label_apparationRate.pack(pady=10)
 
         self.btn_rejouer = tk.Button(self.frame_infos, text="Rejouer", command=self.rejouer)
         self.btn_rejouer.pack(pady=10)
@@ -130,8 +130,8 @@ class Vue:
         # --- Infos ---
         self.label_vie.config(text=f"Vies : {v.vie}")
         self.label_niveau.config(text=f"Niveau : {modele.niveau}")
-        self.label_niveau.config(text=f"Vagues : {modele.round}")
-        self.label_niveau.config(text=f"Apparation Rate : {modele.apparationRate}")
+        self.label_vague.config(text=f"Vagues : {modele.round}")
+        self.label_apparationRate.config(text=f"Apparation Rate : {modele.apparationRate}")
 
     def deplacer_vaisseau(self,evt):
         # on pourrait vouloir le déplacer en y aussi
