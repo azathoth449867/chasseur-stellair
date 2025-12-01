@@ -39,6 +39,10 @@ class Vaisseau:
         self.projectiles.append(nouveau_proj)
 
     def mise_a_jour(self):
+        if self.hp <= 0:                                #######################################################
+            self.vie -=1
+            self.hp = 10
+
         for p in self.projectiles:
             p.mise_a_jour()
 
@@ -106,6 +110,8 @@ class Modele:
         self.enPause = False
         self.pauseCompteur = 0
         self.chronometre = None
+        self.vie = 3
+        self.game_over = False
 
     def deplacer_vaisseau(self,x, y):
         self.souris_x, self.souris_y = x, y
@@ -113,7 +119,7 @@ class Modele:
         self.vaisseau.tirer()
     def incrementer_jeu(self):
         self.frames += 1 * 0.03
-        if self.frames >= 3:
+        if self.frames >= 15:                   # Temp entre chaque vague
             self.frames = 0
             self.round += 1
             print("round: ", self.round)
@@ -140,107 +146,112 @@ class Modele:
     
     def mise_a_jour(self):
         self.vaisseau.mise_a_jour()
-        self.incrementer_jeu()
-        #Verifie si projectile vaisseau touche ovnis
-        for p in self.vaisseau.projectiles:
-            if p.goodBad == "g":
-                for o in self.ovnis:
-                    if (p.x <= o.x + o.taille_x and 
-                        p.x >= o.x - o.taille_x):
-                            if p.y - p.taille_y <= o.y + o.taille_y:
-                                o.hp -= p.dommage #hp ovnis - dommage projectile
-                                print("hp ovnis" , o.hp)
-                                p.alive = False
-
-        #Vérifie si projectile ovnis touche vaisseau
-        for o in self.ovnis:
-            for p in o.projectiles:
-                        if (p.x <= self.vaisseau.x + self.vaisseau.taille_x and 
-                            p.x >= self.vaisseau.x - self.vaisseau.taille_x):
-                                if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y:
+        self.vie = self.vaisseau.vie
+        if self.vaisseau.vie == 0:
+            self.vaisseau = None                        ######################################
+            self.game_over = True
+        if self.vaisseau != None:
+            self.incrementer_jeu()
+            #Verifie si projectile vaisseau touche ovnis
+            for p in self.vaisseau.projectiles:
+                if p.goodBad == "g":
+                    for o in self.ovnis:
+                        if (p.x <= o.x + o.taille_x and 
+                            p.x >= o.x - o.taille_x):
+                                if p.y - p.taille_y <= o.y + o.taille_y:
+                                    o.hp -= p.dommage #hp ovnis - dommage projectile
+                                    print("hp ovnis" , o.hp)
                                     p.alive = False
-                                    self.vaisseau.hp -= p.dommage #hp vaisseau - dommage projectile
-                                    print("hp vaisseau" , self.vaisseau.hp)
 
-        #Verifie si projectile vaisseau touche asteroides
-        for p in self.vaisseau.projectiles:
-            if p.goodBad == "g":
-                for a in self.asteroides:
-                    if (p.x <= a.x + a.taille_x and 
-                        p.x >= a.x - a.taille_x):
-                            if p.y - p.taille_y <= a.y + a.taille_y:
-                                a.hp -= p.dommage #hp asteroides - dommage projectile
-                                print("hp asteroide" , a.hp)
-                                p.alive = False
+            #Vérifie si projectile ovnis touche vaisseau
+            for o in self.ovnis:
+                for p in o.projectiles:
+                            if (p.x <= self.vaisseau.x + self.vaisseau.taille_x and 
+                                p.x >= self.vaisseau.x - self.vaisseau.taille_x):
+                                    if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y:
+                                        p.alive = False
+                                        self.vaisseau.hp -= p.dommage #hp vaisseau - dommage projectile
+                                        print("hp vaisseau" , self.vaisseau.hp)
 
-        #Vérifie si ovnis touche vaisseau
-        for o in self.ovnis:
-            if (o.x + o.taille_x >= self.vaisseau.x - self.vaisseau.taille_x and 
-                o.x - o.taille_x <= self.vaisseau.x + self.vaisseau.taille_x):
-                if (o.y + o.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and
-                    o.y - o.taille_y <= self.vaisseau.y + self.vaisseau.taille_y):
-                        o.hp -= self.vaisseau.dommage_collision
-                        print("ovni hp", o.hp)
-                        self.vaisseau.hp -= o.dommage_collision
-                        print("vaisseau hp", self.vaisseau.hp)
+            #Verifie si projectile vaisseau touche asteroides
+            for p in self.vaisseau.projectiles:
+                if p.goodBad == "g":
+                    for a in self.asteroides:
+                        if (p.x <= a.x + a.taille_x and 
+                            p.x >= a.x - a.taille_x):
+                                if p.y - p.taille_y <= a.y + a.taille_y:
+                                    a.hp -= p.dommage #hp asteroides - dommage projectile
+                                    print("hp asteroide" , a.hp)
+                                    p.alive = False
 
-        #Vérifie si vaisseau touche astéroides
-        for a in self.asteroides:
-            if (a.x + a.taille_x >= self.vaisseau.x - self.vaisseau.taille_x and 
-                a.x - a.taille_x <= self.vaisseau.x + self.vaisseau.taille_x):
-                if (a.y + a.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and
-                    a.y - a.taille_y <= self.vaisseau.y + self.vaisseau.taille_y):
-                        a.hp -= self.vaisseau.dommage_collision
-                        print("asteroides hp", a.hp)
-                        self.vaisseau.hp -= a.dommage_collision
-                        print("vaisseau hp", self.vaisseau.hp)
+            #Vérifie si ovnis touche vaisseau
+            for o in self.ovnis:
+                if (o.x + o.taille_x >= self.vaisseau.x - self.vaisseau.taille_x and 
+                    o.x - o.taille_x <= self.vaisseau.x + self.vaisseau.taille_x):
+                    if (o.y + o.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and
+                        o.y - o.taille_y <= self.vaisseau.y + self.vaisseau.taille_y):
+                            o.hp -= self.vaisseau.dommage_collision
+                            print("ovni hp", o.hp)
+                            self.vaisseau.hp -= o.dommage_collision
+                            print("vaisseau hp", self.vaisseau.hp)
 
-        # Vaisseau déplace vers souris même sans mouvement de souris
-        self.vaisseau.deplacer(self.souris_x, self.souris_y)
-                
-        # Apparition aléatoire des ennemis
-        alea_ovni = random.random()
-        if alea_ovni < self.apparationRate:
-            nouvel_ovni = OVNI(
-                random.randint(0, self.largeur),
-                0,
-                random.randint(2, 5)
-            )
-            self.ovnis.append(nouvel_ovni)
+            #Vérifie si vaisseau touche astéroides
+            for a in self.asteroides:
+                if (a.x + a.taille_x >= self.vaisseau.x - self.vaisseau.taille_x and 
+                    a.x - a.taille_x <= self.vaisseau.x + self.vaisseau.taille_x):
+                    if (a.y + a.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and
+                        a.y - a.taille_y <= self.vaisseau.y + self.vaisseau.taille_y):
+                            a.hp -= self.vaisseau.dommage_collision
+                            print("asteroides hp", a.hp)
+                            self.vaisseau.hp -= a.dommage_collision
+                            print("vaisseau hp", self.vaisseau.hp)
 
-        alea_asteroide = random.random()
-        if alea_asteroide < 0.01:
-            nouvel_ast = Asteroide(
-                random.randint(0, self.largeur),
-                0,
-                random.randint(3, 6)
-            )
-            self.asteroides.append(nouvel_ast)
+            # Vaisseau déplace vers souris même sans mouvement de souris
+            self.vaisseau.deplacer(self.souris_x, self.souris_y)
+                    
+            # Apparition aléatoire des ennemis
+            alea_ovni = random.random()
+            if alea_ovni < self.apparationRate:
+                nouvel_ovni = OVNI(
+                    random.randint(0, self.largeur),
+                    0,
+                    random.randint(2, 5)
+                )
+                self.ovnis.append(nouvel_ovni)
 
-        # Déplacement des ennemis
-        for o in self.ovnis:
-            o.mise_a_jour()
+            alea_asteroide = random.random()
+            if alea_asteroide < 0.01:
+                nouvel_ast = Asteroide(
+                    random.randint(0, self.largeur),
+                    0,
+                    random.randint(3, 6)
+                )
+                self.asteroides.append(nouvel_ast)
 
-        for a in self.asteroides:
-            a.mise_a_jour()
+            # Déplacement des ennemis
+            for o in self.ovnis:
+                o.mise_a_jour()
 
-        # Les ennemis tirent
-        for o in self.ovnis:
-            alea_frequence = random.random()
-            if alea_frequence < 0.02:
-                o.tirer()
-    
-        for o in self.ovnis:
-            o.mouvement_projectile()
+            for a in self.asteroides:
+                a.mise_a_jour()
 
-        # Nettoyage des objets sortis de l'écran
-        self.ovnis = [
-            o for o in self.ovnis
-            if o.y < self.hauteur and o.hp > 0
-        ]
+            # Les ennemis tirent
+            for o in self.ovnis:
+                alea_frequence = random.random()
+                if alea_frequence < 0.02:
+                    o.tirer()
+        
+            for o in self.ovnis:
+                o.mouvement_projectile()
 
-        self.asteroides = [
-            a for a in self.asteroides
-            if a.y < self.hauteur and a.hp > 0
-        ]
+            # Nettoyage des objets sortis de l'écran
+            self.ovnis = [
+                o for o in self.ovnis
+                if o.y < self.hauteur and o.hp > 0
+            ]
+
+            self.asteroides = [
+                a for a in self.asteroides
+                if a.y < self.hauteur and a.hp > 0
+            ]
 

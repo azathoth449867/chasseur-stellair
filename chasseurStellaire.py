@@ -18,6 +18,11 @@ class Controleur:
             self.afficher_intervalle("round")
             self.afficher_intervalle("niveau")
             self.commence_compteur()
+        elif self.modele.game_over:
+            self.modele.ovnis = []
+            self.modele.asteroides = []
+            self.vue.afficher_jeu()
+            self.afficher_intervalle("over")
         else:
             self.modele.mise_a_jour()
             self.vue.afficher_jeu()

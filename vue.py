@@ -52,6 +52,8 @@ class Vue:
                 self.canevas.create_text(300,260,text=f"Round : {self.modele.round}", font=("Arial", 30, "bold"), fill="white")
         if (type == "niveau"):
             self.canevas.create_text(300,198,text=f"Niveau : {self.modele.niveau}", font=("Arial", 50, "bold"), fill="yellow")
+        if (type == "over"):
+            self.canevas.create_text(300,198,text=f"GAME OVER", font=("Arial", 50, "bold"), fill="red")
 
     # ---------- Affichage du jeu ----------
     def afficher_jeu(self):
@@ -59,40 +61,41 @@ class Vue:
         self.canevas.delete("all")
 
         # --- Vaisseau du joueur ---
-        v = modele.vaisseau
         o = modele.ovnis
-        self.canevas.create_rectangle(
-            v.x - v.taille_x,
-            v.y - 5,
-            v.x + v.taille_x,
-            v.y + 5,
-            fill="blue"
-        )
-        self.canevas.create_oval(
-            v.x - (v.taille_x // 2),
-            v.y - v.taille_y,
-            v.x + (v.taille_x // 2),
-            v.y - 5,
-            fill="lightblue"
-        )
-        self.canevas.create_line(
-            v.x,
-            v.y - v.taille_y,
-            v.x,
-            v.y - v.taille_y - 5,
-            fill="white",
-            width=2
-        )
+        if modele.vaisseau != None:
+            v = modele.vaisseau
+            self.canevas.create_rectangle(
+                v.x - v.taille_x,
+                v.y - 5,
+                v.x + v.taille_x,
+                v.y + 5,
+                fill="blue"
+            )
+            self.canevas.create_oval(
+                v.x - (v.taille_x // 2),
+                v.y - v.taille_y,
+                v.x + (v.taille_x // 2),
+                v.y - 5,
+                fill="lightblue"
+            )
+            self.canevas.create_line(
+                v.x,
+                v.y - v.taille_y,
+                v.x,
+                v.y - v.taille_y - 5,
+                fill="white",
+                width=2
+            )
 
         # --- Projectiles ---
-        for p in v.projectiles:
-            self.canevas.create_rectangle(
-                p.x - p.taille_x,
-                p.y - p.taille_y,
-                p.x + p.taille_x,
-                p.y,
-                fill="yellow"
-            )
+            for p in v.projectiles:
+                self.canevas.create_rectangle(
+                    p.x - p.taille_x,
+                    p.y - p.taille_y,
+                    p.x + p.taille_x,
+                    p.y,
+                    fill="yellow"
+                )
         
         for ovni in o:
             for p in ovni.projectiles:
@@ -140,7 +143,7 @@ class Vue:
             self.canevas.create_line(a.x+12, a.y, a.x+18, a.y, fill="red", width=3)
 
         # --- Infos ---
-        self.label_vie.config(text=f"Vies : {v.vie}")
+        self.label_vie.config(text=f"Vies : {modele.vie}")
         self.label_niveau.config(text=f"Niveau : {modele.niveau}")
         self.label_vague.config(text=f"Vagues : {modele.round}")
         self.label_apparationRate.config(text=f"Apparation Rate : {modele.apparationRate}")
