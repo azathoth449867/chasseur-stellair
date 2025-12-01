@@ -54,6 +54,8 @@ class Vue:
             self.canevas.create_text(300,198,text=f"Niveau : {self.modele.niveau}", font=("Arial", 50, "bold"), fill="yellow")
         if (type == "over"):
             self.canevas.create_text(300,198,text=f"GAME OVER", font=("Arial", 50, "bold"), fill="red")
+            self.canevas.create_text(300,260,text=f"Niveau : {self.modele.niveau}", font=("Arial", 30, "bold"), fill="yellow")
+            self.canevas.create_text(300,300,text=f"Round : {self.modele.round}", font=("Arial", 20, "bold"), fill="white")
 
     # ---------- Affichage du jeu ----------
     def afficher_jeu(self):

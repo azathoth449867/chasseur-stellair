@@ -44,6 +44,7 @@ class Controleur:
     def rejouer(self):
         self.modele = Modele(self,600,800)
         self.vue.modele = self.modele
+        self.boucle_jeu()
 
     def commence_compteur(self):
         self.modele.pause_compteur()
