@@ -64,6 +64,7 @@ class Vue:
 
         # --- Vaisseau du joueur ---
         o = modele.ovnis
+        b = modele.boss
         if modele.vaisseau != None:
             v = modele.vaisseau
             self.canevas.create_rectangle(
@@ -108,6 +109,15 @@ class Vue:
                 p.y,
                 fill="yellow"
                 )
+        if modele.boss != None:
+            for p in b.projectiles:
+                    self.canevas.create_rectangle(
+                    p.x - p.taille_x,
+                    p.y - p.taille_y,
+                    p.x + p.taille_x,
+                    p.y,
+                    fill="red"
+                    )
 
         # --- OVNIs ---
         for o in modele.ovnis:
@@ -134,6 +144,16 @@ class Vue:
                 fill="yellow",
                 width=2
             )
+
+        # BOSS
+        if (b != None):
+            self.canevas.create_rectangle(b.x-20, b.y-10, b.x+20, b.y+10, fill="gray")
+            self.canevas.create_oval(b.x-15, b.y-3, b.x-10, b.y+2, fill="red")
+            self.canevas.create_oval(b.x+10, b.y-3, b.x+15, b.y+2, fill="blue")
+            self.canevas.create_rectangle(b.x-15, b.y+10, b.x-5, b.y+15, fill="orange")
+            self.canevas.create_rectangle(b.x-13, b.y+15, b.x-7, b.y+20, fill="orange")
+            self.canevas.create_rectangle(b.x+5, b.y+10, b.x+15, b.y+15, fill="orange")
+            self.canevas.create_rectangle(b.x+7, b.y+15, b.x+13, b.y+20, fill="orange")
 
         # --- Astéroïdes ---
         for a in modele.asteroides:

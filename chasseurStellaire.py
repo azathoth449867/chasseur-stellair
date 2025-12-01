@@ -24,6 +24,8 @@ class Controleur:
             self.vue.afficher_jeu()
             self.afficher_intervalle("over")
         else:
+            if self.modele.estCommence == False:
+                self.modele.definir_niveau()
             self.modele.mise_a_jour()
             self.vue.afficher_jeu()
             self.vue.root.after(30, self.boucle_jeu)

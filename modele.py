@@ -77,6 +77,42 @@ class OVNI:
                     if p.y < 700 and p.alive
                 ]
         
+class BOSS:
+    def __init__(self, vx, taille_x, taille_y, hp):
+        self.x = 300
+        self.y = 50
+        self.vx = vx
+        self.taille_x = taille_x
+        self.taille_y = taille_y
+        self.projectiles = []
+        self.hp = hp
+        self.dommage_collision = 100
+        self.attackFrequence = 0
+
+    def tirer(self):
+        nouveau_proj = Projectile(self.x, self.y + 20, "b")
+        self.projectiles.append(nouveau_proj)
+    def mouvement_projectile(self):
+        for p in self.projectiles: 
+            p.mise_a_jour()
+    def mise_a_jour(self):
+        self.x += self.vx
+        if self.x >= 500 or self.x <= 100:
+            self.vx = -self.vx
+        self.projectiles = [
+                    p for p in self.projectiles
+                    if p.y < 700 and p.alive
+                ]
+
+class DoubleCannon(BOSS):
+    def __init__(self):
+        super().__init__(3, 20, 30, 100)
+        self.tire = True
+
+    def tirer(self):
+        nouveau_proj = Projectile(self.x, self.y + 20, "b")
+        self.projectiles.append(nouveau_proj)
+        
 class Asteroide:
     def __init__(self, x, y, vy):
         self.x = x
@@ -98,6 +134,7 @@ class Modele:
         self.largeur = 600
         self.hauteur = 700
         self.vaisseau = Vaisseau(self.largeur // 2, self.hauteur - 50)
+        self.boss = None
         self.ovnis = []
         self.asteroides = []
         self.score = 0
@@ -112,6 +149,8 @@ class Modele:
         self.chronometre = None
         self.vie = 3
         self.game_over = False
+        self.boss_id = None
+        self.estCommence = False
 
     def deplacer_vaisseau(self,x, y):
         self.souris_x, self.souris_y = x, y
@@ -119,36 +158,48 @@ class Modele:
         self.vaisseau.tirer()
     def incrementer_jeu(self):
         self.frames += 1 * 0.03
-        if self.frames >= 15:                   # Temp entre chaque vague
-            self.frames = 0
-            self.round += 1
-            print("round: ", self.round)
-            self.prochaine_round()
+        if self.boss == None:
+            if self.frames >= 1:                   # Temp entre chaque vague
+                self.frames = 0
+                self.round += 1
+                self.prochaine_round()
         if self.round > 3:
-            self.round = 1
-            self.niveau += 1
-            print("niveau:", self.niveau)
-            self.prochain_niveau()
-        self.apparationRate = 0.02 * (self.round * 0.5 + self.niveau)
-    
+            if self.boss == None:
+                self.boss = self.creer_boss(self.boss_id)
+                self.apparationRate = 0
+                if self.boss.hp <= 0:
+                    self.round = 1
+                    self.niveau += 1
+                    self.prochain_niveau()
+        
     def pause_compteur(self):
         self.pauseCompteur += 1 * 0.03
-        print(self.pauseCompteur)
     
     def prochaine_round(self):
         self.enPause = True
-        self.parent.afficher_intervalle("round")
+        self.apparationRate = 0.02 * (self.round * 0.5 + self.niveau)
         
     def prochain_niveau(self):
         self.enPause = True
-        self.parent.afficher_intervalle("niveau")
+        self.boss_id = None
+        self.definir_niveau()
         
-    
+    def definir_niveau(self):
+        self.boss_id = 1 #random.randint(1, ...) pour futur boss
+        self.estCommence = True
+        self.apparationRate = 0.02 * (self.round * 0.5 + self.niveau)
+
+    def creer_boss(self, boss_id): # génère un boss aléatoire pour le niveau
+        BOSS_TYPES = {
+            1: DoubleCannon()
+        }
+        return BOSS_TYPES[boss_id]
+        
     def mise_a_jour(self):
         self.vaisseau.mise_a_jour()
         self.vie = self.vaisseau.vie
         if self.vaisseau.vie == 0:
-            self.vaisseau = None                        ######################################
+            self.vaisseau = None       
             self.game_over = True
         if self.vaisseau != None:
             self.incrementer_jeu()
@@ -160,7 +211,6 @@ class Modele:
                             p.x >= o.x - o.taille_x):
                                 if p.y - p.taille_y <= o.y + o.taille_y:
                                     o.hp -= p.dommage #hp ovnis - dommage projectile
-                                    print("hp ovnis" , o.hp)
                                     p.alive = False
 
             #Vérifie si projectile ovnis touche vaisseau
@@ -171,7 +221,6 @@ class Modele:
                                     if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y:
                                         p.alive = False
                                         self.vaisseau.hp -= p.dommage #hp vaisseau - dommage projectile
-                                        print("hp vaisseau" , self.vaisseau.hp)
 
             #Verifie si projectile vaisseau touche asteroides
             for p in self.vaisseau.projectiles:
@@ -181,7 +230,6 @@ class Modele:
                             p.x >= a.x - a.taille_x):
                                 if p.y - p.taille_y <= a.y + a.taille_y:
                                     a.hp -= p.dommage #hp asteroides - dommage projectile
-                                    print("hp asteroide" , a.hp)
                                     p.alive = False
 
             #Vérifie si ovnis touche vaisseau
@@ -191,9 +239,7 @@ class Modele:
                     if (o.y + o.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and
                         o.y - o.taille_y <= self.vaisseau.y + self.vaisseau.taille_y):
                             o.hp -= self.vaisseau.dommage_collision
-                            print("ovni hp", o.hp)
                             self.vaisseau.hp -= o.dommage_collision
-                            print("vaisseau hp", self.vaisseau.hp)
 
             #Vérifie si vaisseau touche astéroides
             for a in self.asteroides:
@@ -202,9 +248,7 @@ class Modele:
                     if (a.y + a.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and
                         a.y - a.taille_y <= self.vaisseau.y + self.vaisseau.taille_y):
                             a.hp -= self.vaisseau.dommage_collision
-                            print("asteroides hp", a.hp)
                             self.vaisseau.hp -= a.dommage_collision
-                            print("vaisseau hp", self.vaisseau.hp)
 
             # Vaisseau déplace vers souris même sans mouvement de souris
             self.vaisseau.deplacer(self.souris_x, self.souris_y)
@@ -234,6 +278,9 @@ class Modele:
 
             for a in self.asteroides:
                 a.mise_a_jour()
+            
+            if self.boss != None:
+                self.boss.mise_a_jour()
 
             # Les ennemis tirent
             for o in self.ovnis:
@@ -243,6 +290,19 @@ class Modele:
         
             for o in self.ovnis:
                 o.mouvement_projectile()
+            
+            if self.boss != None:
+                if self.boss.tire == True:
+                    if self.boss.attackFrequence == 5:
+                        self.boss.tirer()
+                        self.boss.attackFrequence = 0
+                    self.boss.attackFrequence += 1
+                if self.frames >= 5:
+                    self.boss.tire = not self.boss.tire
+                    self.frames = 0   
+                self.boss.mouvement_projectile()
+                print(self.frames)
+                
 
             # Nettoyage des objets sortis de l'écran
             self.ovnis = [
