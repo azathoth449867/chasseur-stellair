@@ -46,6 +46,13 @@ class Vue:
 
         self.btn_rejouer = tk.Button(self.frame_infos, text="Rejouer", command=self.rejouer)
         self.btn_rejouer.pack(pady=10)
+        self.btn_start = tk.Button(self.canevas, text="Piloter", command=self.piloter)
+        self.btn_start.place(x=250, y=550, width=120, height=60)
+    
+    
+    def piloter(self):
+        #self.btn_start.destroy()
+        pass
 
     def creer_fenetre_intervalle(self, type):
         if (type == "round"):
