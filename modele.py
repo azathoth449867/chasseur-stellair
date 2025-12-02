@@ -110,7 +110,7 @@ class Boss:
 
 class DoubleCannon(Boss):
     def __init__(self):
-        super().__init__(3, 20, 30, 100)
+        super().__init__(3, 20, 30, 20)
         
 
     def tirer(self):
@@ -171,12 +171,9 @@ class Modele:
             if self.boss == None:
                 self.boss = self.creer_boss(self.boss_id)
                 self.apparationRate = 0
-                if self.boss.estVivant == False:
-                    self.round = 1
-                    self.niveau += 1
-                    self.boss = None
-                    self.prochain_niveau()
-        
+            if self.boss.estVivant == False:
+                self.prochain_niveau()
+                    
     def pause_compteur(self):
         self.pauseCompteur += 1 * 0.03
     
@@ -185,6 +182,9 @@ class Modele:
         self.apparationRate = 0.02 * (self.round * 0.5 + self.niveau)
         
     def prochain_niveau(self):
+        self.boss = None
+        self.round = 1
+        self.niveau += 1
         self.enPause = True
         self.boss_id = None
         self.vaisseau.projectiles = []
@@ -226,7 +226,6 @@ class Modele:
                                 if p.y - p.taille_y <= b.y + b.taille_y:
                                     b.hp -= p.dommage #hp ovnis - dommage projectile
                                     p.alive = False
-                                    print(b.hp)
 
             #Vérifie si projectile ovnis touche vaisseau
             for o in self.ovnis:
@@ -332,7 +331,6 @@ class Modele:
                     self.boss.enTire = not self.boss.enTire
                     self.frames = 0   
                 self.boss.mouvement_projectile()
-                print(self.frames)
                 
             # Nettoyage des objets sortis de l'écran
             self.ovnis = [
