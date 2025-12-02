@@ -24,6 +24,8 @@ class Vue:
         self.canevas.bind("<Motion>", self.deplacer_vaisseau)
         self.canevas.bind("<Button-1>", self.tirer)
         self.canevas.bind("<ButtonRelease-1>", self.release)
+        self.btn_start = tk.Button(self.canevas, text="Piloter", command=self.piloter)
+        self.btn_start.place(x=250, y=550, width=120, height=60)
 
     def release(self, evt):
         self.controleur.release()
@@ -46,8 +48,22 @@ class Vue:
 
         self.btn_rejouer = tk.Button(self.frame_infos, text="Rejouer", command=self.rejouer)
         self.btn_rejouer.pack(pady=10)
-        self.btn_start = tk.Button(self.canevas, text="Piloter", command=self.piloter)
-        self.btn_start.place(x=250, y=550, width=120, height=60)
+        #####
+        self.frame_attribut = tk.Frame(self.frame_principale, bg="#b03c32")
+        self.frame_attribut.place(x=604, y=225, width=175)
+
+        self.label_pv = tk.Label(self.frame_attribut, text=f"Pv : {self.modele.vaisseau.hp}", fg="white", bg="#b03c32", font=("Arial", 12))
+        self.label_pv.pack(pady=10)
+
+        self.label_niveau = tk.Label(self.frame_attribut, text="Niveau : 1", fg="white", bg="#b03c32", font=("Arial", 12))
+        self.label_niveau.pack(pady=10)
+
+        self.label_vague = tk.Label(self.frame_attribut, text="Vagues : 1", fg="white", bg="#b03c32", font=("Arial", 12))
+        self.label_vague.pack(pady=10)
+
+
+
+        
     
     
     def piloter(self):
@@ -180,6 +196,7 @@ class Vue:
         self.label_niveau.config(text=f"Niveau : {modele.niveau}")
         self.label_vague.config(text=f"Vagues : {modele.round}")
         self.label_apparationRate.config(text=f"Apparation Rate : {modele.apparationRate}")
+        self.label_pv.config(text=f"Pv : {self.modele.vaisseau.hp}")
 
     def deplacer_vaisseau(self,evt):
         # on pourrait vouloir le déplacer en y aussi
