@@ -48,6 +48,7 @@ class Controleur:
         self.modele = Modele(self,600,800)
         self.vue.modele = self.modele
         self.vue.creer_btn_piloter()
+        self.vue.afficher_jeu()
 
     def commence_compteur(self):
         self.modele.pause_compteur()
