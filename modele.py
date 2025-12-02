@@ -77,7 +77,7 @@ class OVNI:
                     if p.y < 700 and p.alive
                 ]
         
-class BOSS:
+class Boss:
     def __init__(self, vx, taille_x, taille_y, hp):
         self.x = 300
         self.y = 50
@@ -88,6 +88,8 @@ class BOSS:
         self.hp = hp
         self.dommage_collision = 100
         self.attackFrequence = 0
+        self.estVivant = True
+        self.enTire = True
 
     def tirer(self):
         nouveau_proj = Projectile(self.x, self.y + 20, "b")
@@ -97,6 +99,8 @@ class BOSS:
             p.mise_a_jour()
     def mise_a_jour(self):
         self.x += self.vx
+        if self.hp <= 0: # check état de vie
+            self.estVivant = False
         if self.x >= 500 or self.x <= 100:
             self.vx = -self.vx
         self.projectiles = [
@@ -104,10 +108,10 @@ class BOSS:
                     if p.y < 700 and p.alive
                 ]
 
-class DoubleCannon(BOSS):
+class DoubleCannon(Boss):
     def __init__(self):
         super().__init__(3, 20, 30, 100)
-        self.tire = True
+        
 
     def tirer(self):
         nouveau_proj = Projectile(self.x, self.y + 20, "b")
@@ -167,9 +171,10 @@ class Modele:
             if self.boss == None:
                 self.boss = self.creer_boss(self.boss_id)
                 self.apparationRate = 0
-                if self.boss.hp <= 0:
+                if self.boss.estVivant == False:
                     self.round = 1
                     self.niveau += 1
+                    self.boss = None
                     self.prochain_niveau()
         
     def pause_compteur(self):
@@ -182,6 +187,7 @@ class Modele:
     def prochain_niveau(self):
         self.enPause = True
         self.boss_id = None
+        self.vaisseau.projectiles = []
         self.definir_niveau()
         
     def definir_niveau(self):
@@ -193,6 +199,7 @@ class Modele:
         BOSS_TYPES = {
             1: DoubleCannon()
         }
+        self.vaisseau.projectiles = [] # vide projectiles existants
         return BOSS_TYPES[boss_id]
         
     def mise_a_jour(self):
@@ -219,6 +226,7 @@ class Modele:
                                 if p.y - p.taille_y <= b.y + b.taille_y:
                                     b.hp -= p.dommage #hp ovnis - dommage projectile
                                     p.alive = False
+                                    print(b.hp)
 
             #Vérifie si projectile ovnis touche vaisseau
             for o in self.ovnis:
@@ -315,13 +323,13 @@ class Modele:
                 o.mouvement_projectile()
             
             if self.boss != None:
-                if self.boss.tire == True:
+                if self.boss.enTire == True:
                     if self.boss.attackFrequence == 5:
                         self.boss.tirer()
                         self.boss.attackFrequence = 0
                     self.boss.attackFrequence += 1
                 if self.frames >= 5:
-                    self.boss.tire = not self.boss.tire
+                    self.boss.enTire = not self.boss.enTire
                     self.frames = 0   
                 self.boss.mouvement_projectile()
                 print(self.frames)
