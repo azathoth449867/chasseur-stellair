@@ -51,8 +51,12 @@ class Vue:
     
     
     def piloter(self):
-        #self.btn_start.destroy()
-        pass
+        self.controleur.commencer()
+        self.btn_start.destroy()
+    
+    def creer_btn_piloter(self):
+        self.btn_start = tk.Button(self.canevas, text="Piloter", command=self.piloter)
+        self.btn_start.place(x=250, y=550, width=120, height=60)
 
     def creer_fenetre_intervalle(self, type):
         if (type == "round"):

@@ -26,9 +26,10 @@ class Controleur:
         else:
             if self.modele.estCommence == False:
                 self.modele.definir_niveau()
-            self.modele.mise_a_jour()
-            self.vue.afficher_jeu()
-            self.vue.root.after(30, self.boucle_jeu)
+            else:
+                self.modele.mise_a_jour()
+                self.vue.afficher_jeu()
+                self.vue.root.after(30, self.boucle_jeu)
 
     # Méthodes appelées par la Vue (via bindings)
     def deplacer_vaisseau(self, x, y):
@@ -46,7 +47,7 @@ class Controleur:
     def rejouer(self):
         self.modele = Modele(self,600,800)
         self.vue.modele = self.modele
-        self.boucle_jeu()
+        self.vue.creer_btn_piloter()
 
     def commence_compteur(self):
         self.modele.pause_compteur()
@@ -60,6 +61,11 @@ class Controleur:
 
     def afficher_intervalle(self, type):
         self.vue.afficher_intervalle(type)
+
+    def commencer(self):
+        self.modele.estCommence = True
+        self.boucle_jeu()
+
 
 if __name__ == "__main__":
     c = Controleur()
