@@ -127,24 +127,25 @@ class Vue:
                     fill="yellow"
                 )
         
-        for ovni in o:
-            for p in ovni.projectiles:
-                self.canevas.create_rectangle(
-                p.x - p.taille_x,
-                p.y - p.taille_y,
-                p.x + p.taille_x,
-                p.y,
-                fill="yellow"
-                )
-        if modele.boss != None:
-            for p in b.projectiles:
+            for ovni in o:
+                for p in ovni.projectiles:
                     self.canevas.create_rectangle(
                     p.x - p.taille_x,
                     p.y - p.taille_y,
                     p.x + p.taille_x,
                     p.y,
-                    fill="red"
+                    fill="yellow"
                     )
+
+            if modele.boss != None:
+                for p in b.projectiles:
+                        self.canevas.create_rectangle(
+                        p.x - p.taille_x,
+                        p.y - p.taille_y,
+                        p.x + p.taille_x,
+                        p.y,
+                        fill="red"
+                        )
 
         # --- OVNIs ---
         for o in modele.ovnis:

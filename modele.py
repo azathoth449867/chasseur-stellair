@@ -27,7 +27,8 @@ class Vaisseau:
         self.projectiles = []
         self.taille_x = 15
         self.taille_y = 15
-        self.hp = 10
+        self.hp = 30
+        self.maxHp = 30
         self.dommage_collision = 20
 
     def deplacer(self, x, y):
@@ -154,6 +155,7 @@ class Modele:
         self.vie = 3
         self.game_over = False
         self.boss_id = None
+        self.recompense_id = None
         self.estCommence = False
 
     def deplacer_vaisseau(self,x, y):
@@ -172,6 +174,8 @@ class Modele:
                 self.boss = self.creer_boss(self.boss_id)
                 self.apparationRate = 0
             if self.boss.estVivant == False:
+                self.appliquer_recompense(self.recompense_id)
+                print(self.vaisseau.hp)
                 self.prochain_niveau()
                     
     def pause_compteur(self):
@@ -187,13 +191,27 @@ class Modele:
         self.niveau += 1
         self.enPause = True
         self.boss_id = None
+        self.boss_od = None
+        self.vaisseau.hp = self.vaisseau.maxHp # vaisseau regagne hp entre niveau
+        print(self.vaisseau.hp,self.vaisseau.maxHp)
         self.vaisseau.projectiles = []
         self.definir_niveau()
         
     def definir_niveau(self):
-        self.boss_id = 1 #random.randint(1, ...) pour futur boss
+        self.boss_id = 1 #random.randint(1, ...) pour futur boss et recompense
+        self.recompense_id = 1 
         self.estCommence = True
         self.apparationRate = 0.02 * (self.round * 0.5 + self.niveau)
+
+    def appliquer_recompense(self, recompense_id):
+        def max_hp():
+            self.vaisseau.maxHp += 5
+
+        RECOMPENSES_TYPES = {
+            1: max_hp(),
+        }
+        return RECOMPENSES_TYPES[recompense_id]
+        
 
     def creer_boss(self, boss_id): # génère un boss aléatoire pour le niveau
         BOSS_TYPES = {
@@ -236,7 +254,7 @@ class Modele:
                                     p.alive = False
                                     self.vaisseau.hp -= p.dommage #hp vaisseau - dommage projectile
 
-            #Verifie si projectile boss touch vaisseau
+            #Verifie si projectile boss touche vaisseau
             if self.boss != None:
                 for p in self.boss.projectiles:
                     if (p.x <= self.vaisseau.x + self.vaisseau.taille_x and 
