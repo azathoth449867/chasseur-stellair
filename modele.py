@@ -278,7 +278,7 @@ class Modele:
                 for p in o.projectiles:
                         if (p.x <= self.vaisseau.x + self.vaisseau.taille_x and 
                             p.x >= self.vaisseau.x - self.vaisseau.taille_x):
-                                if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y:
+                                if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and p.y - p.taille_y <= self.vaisseau.y + self.vaisseau.taille_y:
                                     p.alive = False
                                     self.vaisseau.hp -= p.dommage #hp vaisseau - dommage projectile
 
@@ -287,7 +287,7 @@ class Modele:
                 for p in self.boss.projectiles:
                     if (p.x <= self.vaisseau.x + self.vaisseau.taille_x and 
                             p.x >= self.vaisseau.x - self.vaisseau.taille_x):
-                                if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y:
+                                if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and p.y - p.taille_y <= self.vaisseau.y + self.vaisseau.taille_y:
                                     p.alive = False
                                     self.vaisseau.hp -= p.dommage
 
