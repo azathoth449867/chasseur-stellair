@@ -64,11 +64,6 @@ class Vue:
         self.label_score = tk.Label(self.frame_attribut, text=f"Score : {self.modele.score}", fg="white", bg="#b03c32", font=("Arial", 12))
         self.label_score.pack(pady=10)
 
-
-
-        
-    
-    
     def piloter(self):
         self.controleur.commencer()
         self.btn_start.destroy()
@@ -176,7 +171,7 @@ class Vue:
                 width=2
             )
 
-        # BOSS
+        # --- Boss ---
         if (b != None):
             self.canevas.create_rectangle(b.x-20, b.y-10, b.x+20, b.y+10, fill="gray")
             self.canevas.create_oval(b.x-15, b.y-3, b.x-10, b.y+2, fill="red")
@@ -194,6 +189,10 @@ class Vue:
             self.canevas.create_line(a.x, a.y+12, a.x, a.y+18, fill="red", width=3)
             self.canevas.create_line(a.x - 18, a.y, a.x-12, a.y, fill="red", width=3)
             self.canevas.create_line(a.x+12, a.y, a.x+18, a.y, fill="red", width=3)
+        
+        # --- Ressources ---
+        for r in modele.ressources:
+            self.canevas.create_oval(r.x - r.taille_x, r.y - r.taille_y, r.x + r.taille_x, r.y + r.taille_y, fill="blue")
 
         # --- Infos ---
         self.label_vie.config(text=f"Vies : {modele.vie}")

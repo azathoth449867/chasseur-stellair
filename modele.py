@@ -18,8 +18,15 @@ class Projectile:
 
     def mise_a_jour(self):
         self.y += self.vitesse
-    
-    ()
+    def appliquer_degat(self, target):
+        if hasattr(target, 'bouclier'):
+            # target est le vaisseau
+            if target.bouclier > 0:
+                target.bouclier -= 1
+            else: 
+                target.hp -= self.dommage
+            return
+        target.hp -= self.dommage
 
 class Vaisseau:
     def __init__(self,parent, x, y):
@@ -144,9 +151,13 @@ class Ressource:
         self.taille_x = 12
         self.taille_y = 12
         self.vaisseau = vaisseau
+        self.alive = True
     
     def mise_a_jour(self):
         self.y += self.vy
+    def contact_vaisseau(self):
+        self.alive = False
+        self.appliquer_buff()
     def appliquer_buff(self):
         pass
 
@@ -261,9 +272,10 @@ class Modele:
         self.vaisseau.projectiles = [] # vide projectiles existants
         return BOSS_TYPES[boss_id]
     
-    def creer_ressource(self, ressource_id):
+    def creer_ressource(self, ressource_id, vaisseau):
+        x = random.randint(50,550)
         RESSOURCE_TYPES = {
-            1: Bouclier()
+            1: Bouclier(vaisseau, x)
         }
         return RESSOURCE_TYPES[ressource_id]
         
@@ -276,6 +288,15 @@ class Modele:
             self.game_over = True
         if self.vaisseau != None:
             self.incrementer_jeu()
+
+            # Vérifie collisions ressources avec vaisseau
+            for r in self.ressources:
+                 if (r.x <= self.vaisseau.x + self.vaisseau.taille_x and 
+                            r.x >= self.vaisseau.x - self.vaisseau.taille_x):
+                                if r.y + r.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and r.y - r.taille_y <= self.vaisseau.y + self.vaisseau.taille_y:
+                                    r.contact_vaisseau()
+                                    print(self.vaisseau.bouclier)
+
             #Verifie si projectile vaisseau touche ovnis ou boss
             for p in self.vaisseau.projectiles:
                 if p.goodBad == "g":
@@ -283,13 +304,14 @@ class Modele:
                         if (p.x <= o.x + o.taille_x and 
                             p.x >= o.x - o.taille_x):
                                 if p.y - p.taille_y <= o.y + o.taille_y:
-                                    o.hp -= p.dommage #hp ovnis - dommage projectile
+                                    p.appliquer_degat(o) #hp ovnis - dommage projectile
+                                    print(o.hp)
                                     p.alive = False
                     if self.boss != None:
                         if (p.x <= b.x + b.taille_x and 
                             p.x >= b.x - b.taille_x):
                                 if p.y - p.taille_y <= b.y + b.taille_y:
-                                    b.hp -= p.dommage #hp ovnis - dommage projectile
+                                    p.appliquer_degat(b)
                                     p.alive = False
 
             #Vérifie si projectile ovnis touche vaisseau
@@ -376,19 +398,23 @@ class Modele:
             alea_ressource = random.random()
             if alea_ressource < 0.005:
                 ressource_id = 1
-                
-
-
-            # Déplacement des ennemis
+                nouvelle_res = self.creer_ressource(ressource_id, self.vaisseau)
+                self.ressources.append(nouvelle_res)
+                print(nouvelle_res)
+            # Déplacement des objets
+            # Ennemis
             for o in self.ovnis:
                 o.mise_a_jour()
 
             for a in self.asteroides:
                 a.mise_a_jour()
-            
+                
             if self.boss != None:
                 self.boss.mise_a_jour()
 
+            # Ressources
+            for r in self.ressources:
+                r.mise_a_jour()
             # Les ennemis tirent
             for o in self.ovnis:
                 alea_frequence = random.random()
@@ -426,5 +452,10 @@ class Modele:
             self.asteroides = [
                 a for a in self.asteroides
                 if a.y < self.hauteur and a.hp > 0
+            ]
+
+            self.ressources = [
+                r for r in self.ressources
+                if r.y < self.hauteur and r.alive == True
             ]
 
