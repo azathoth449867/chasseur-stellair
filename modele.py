@@ -296,8 +296,9 @@ class Modele:
                         if (p.x <= self.vaisseau.x + self.vaisseau.taille_x and 
                             p.x >= self.vaisseau.x - self.vaisseau.taille_x):
                                 if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and p.y - p.taille_y <= self.vaisseau.y + self.vaisseau.taille_y:
-                                    p.alive = False
-                                    self.vaisseau.hp -= p.dommage #hp vaisseau - dommage projectile
+                                    if not self.vaisseau.invincible:
+                                        p.alive = False
+                                        self.vaisseau.hp -= p.dommage #hp vaisseau - dommage projectile
 
             #Verifie si projectile boss touche vaisseau
             if self.boss != None:
@@ -305,8 +306,9 @@ class Modele:
                     if (p.x <= self.vaisseau.x + self.vaisseau.taille_x and 
                             p.x >= self.vaisseau.x - self.vaisseau.taille_x):
                                 if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and p.y - p.taille_y <= self.vaisseau.y + self.vaisseau.taille_y:
-                                    p.alive = False
-                                    self.vaisseau.hp -= p.dommage
+                                    if not self.vaisseau.invincible:
+                                        p.alive = False
+                                        self.vaisseau.hp -= p.dommage
 
             #Verifie si projectile vaisseau touche asteroides
             for p in self.vaisseau.projectiles:
@@ -324,15 +326,17 @@ class Modele:
                     o.x - o.taille_x <= self.vaisseau.x + self.vaisseau.taille_x):
                     if (o.y + o.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and
                         o.y - o.taille_y <= self.vaisseau.y + self.vaisseau.taille_y):
-                            o.hp -= self.vaisseau.dommage_collision
-                            self.vaisseau.hp -= o.dommage_collision
+                            if not self.vaisseau.invincible:
+                                o.hp -= self.vaisseau.dommage_collision
+                                self.vaisseau.hp -= o.dommage_collision
             if b != None:
                 if (b.x + b.taille_x >= self.vaisseau.x - self.vaisseau.taille_x and 
                     b.x - b.taille_x <= self.vaisseau.x + self.vaisseau.taille_x):
                     if (b.y + b.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and
                         b.y - b.taille_y <= self.vaisseau.y + self.vaisseau.taille_y):
-                            b.hp -= self.vaisseau.dommage_collision
-                            self.vaisseau.hp -= b.dommage_collision
+                            if not self.vaisseau.invincible:
+                                b.hp -= self.vaisseau.dommage_collision
+                                self.vaisseau.hp -= b.dommage_collision
 
             #Vérifie si vaisseau touche astéroides
             for a in self.asteroides:
@@ -340,8 +344,9 @@ class Modele:
                     a.x - a.taille_x <= self.vaisseau.x + self.vaisseau.taille_x):
                     if (a.y + a.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and
                         a.y - a.taille_y <= self.vaisseau.y + self.vaisseau.taille_y):
-                            a.hp -= self.vaisseau.dommage_collision
-                            self.vaisseau.hp -= a.dommage_collision
+                            if not self.vaisseau.invincible:
+                                a.hp -= self.vaisseau.dommage_collision
+                                self.vaisseau.hp -= a.dommage_collision
 
             # Vaisseau déplace vers souris même sans mouvement de souris
             self.vaisseau.deplacer(self.souris_x, self.souris_y)
