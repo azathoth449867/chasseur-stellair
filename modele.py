@@ -157,6 +157,7 @@ class Modele:
         self.boss_id = None
         self.recompense_id = None
         self.estCommence = False
+        
 
     def deplacer_vaisseau(self,x, y):
         self.souris_x, self.souris_y = x, y
@@ -174,6 +175,7 @@ class Modele:
                 self.boss = self.creer_boss(self.boss_id)
                 self.apparationRate = 0
             if self.boss.estVivant == False:
+                self.score += 10
                 self.appliquer_recompense(self.recompense_id)
                 print(self.vaisseau.hp)
                 self.prochain_niveau()
@@ -350,6 +352,14 @@ class Modele:
                     self.frames = 0   
                 self.boss.mouvement_projectile()
                 
+            #Calcule des points
+            for o in self.ovnis:
+                if o.hp <= 0:
+                    self.score += 2
+            for a in self.asteroides:
+                if a.hp <= 0:
+                    self.score += 1
+
             # Nettoyage des objets sortis de l'écran
             self.ovnis = [
                 o for o in self.ovnis

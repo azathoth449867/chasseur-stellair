@@ -60,6 +60,9 @@ class Vue:
 
         self.label_vague = tk.Label(self.frame_attribut, text="Vagues : 1", fg="white", bg="#b03c32", font=("Arial", 12))
         self.label_vague.pack(pady=10)
+        
+        self.label_score = tk.Label(self.frame_attribut, text=f"Score : {self.modele.score}", fg="white", bg="#b03c32", font=("Arial", 12))
+        self.label_score.pack(pady=10)
 
 
 
@@ -198,6 +201,7 @@ class Vue:
         self.label_vague.config(text=f"Vagues : {modele.round}")
         self.label_apparationRate.config(text=f"Apparation Rate : {modele.apparationRate}")
         self.label_pv.config(text=f"Pv : {self.modele.vaisseau.hp}")
+        self.label_score.config(text=f"Score : {self.modele.score}")
 
     def deplacer_vaisseau(self,evt):
         # on pourrait vouloir le déplacer en y aussi
