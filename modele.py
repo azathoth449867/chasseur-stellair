@@ -218,7 +218,7 @@ class Modele:
             
         
         if self.boss == None:
-            if self.frames >= 5:                   # Temp entre chaque vague
+            if self.frames >= 10:                   # Temp entre chaque vague
                 self.frames = 0
                 self.round += 1
                 self.prochaine_round()

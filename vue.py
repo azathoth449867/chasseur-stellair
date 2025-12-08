@@ -92,28 +92,53 @@ class Vue:
         b = modele.boss
         if modele.vaisseau != None:
             v = modele.vaisseau
-            self.canevas.create_rectangle(
-                v.x - v.taille_x,
-                v.y - 5,
-                v.x + v.taille_x,
-                v.y + 5,
-                fill="blue"
-            )
-            self.canevas.create_oval(
-                v.x - (v.taille_x // 2),
-                v.y - v.taille_y,
-                v.x + (v.taille_x // 2),
-                v.y - 5,
-                fill="lightblue"
-            )
-            self.canevas.create_line(
-                v.x,
-                v.y - v.taille_y,
-                v.x,
-                v.y - v.taille_y - 5,
-                fill="white",
-                width=2
-            )
+            if not v.invincible:
+                self.canevas.create_rectangle(
+                    v.x - v.taille_x,
+                    v.y - 5,
+                    v.x + v.taille_x,
+                    v.y + 5,
+                    fill="blue"
+                )
+                self.canevas.create_oval(
+                    v.x - (v.taille_x // 2),
+                    v.y - v.taille_y,
+                    v.x + (v.taille_x // 2),
+                    v.y - 5,
+                    fill="lightblue"
+                )
+                self.canevas.create_line(
+                    v.x,
+                    v.y - v.taille_y,
+                    v.x,
+                    v.y - v.taille_y - 5,
+                    fill="white",
+                    width=2
+                )
+            else:
+                self.canevas.create_rectangle(
+                    v.x - v.taille_x,
+                    v.y - 5,
+                    v.x + v.taille_x,
+                    v.y + 5,
+                    fill="yellow",
+                )
+                self.canevas.create_oval(
+                    v.x - (v.taille_x // 2),
+                    v.y - v.taille_y,
+                    v.x + (v.taille_x // 2),
+                    v.y - 5,
+                    fill="lightyellow",
+                )
+                self.canevas.create_line(
+                    v.x,
+                    v.y - v.taille_y,
+                    v.x,
+                    v.y - v.taille_y - 5,
+                    fill="white",
+                    width=2
+                )
+
 
         # --- Projectiles ---
             for p in v.projectiles:
