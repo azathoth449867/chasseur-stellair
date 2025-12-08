@@ -134,12 +134,13 @@ class Asteroide:
         self.y += self.vy
 
 class Ressource:
-    def __init__(self, x, vy):
+    def __init__(self, vaisseau, x, vy):
         self.x = x
         self.y = -5
         self.vy = vy
         self.taille_x = 12
         self.taille_y = 12
+        self.vaisseau = vaisseau
     
     def mise_a_jour(self):
         self.y += self.vy
@@ -147,8 +148,8 @@ class Ressource:
         pass
 
 class Bouclier(Ressource):
-    def __init__(self, x):
-        super().__init__(x, 0.8)
+    def __init__(self, vaisseau, x):
+        super().__init__(vaisseau, x, 0.75)
     def appliquer_buff(self):
         self.vaisseau.bouclier += 1
 
@@ -163,6 +164,7 @@ class Modele:
         self.boss = None
         self.ovnis = []
         self.asteroides = []
+        self.ressources = []
         self.score = 0
         self.niveau = 1
         self.round = 1
@@ -179,7 +181,6 @@ class Modele:
         self.recompense_id = None
         self.estCommence = False
         
-
     def deplacer_vaisseau(self,x, y):
         self.souris_x, self.souris_y = x, y
     def tirer(self):
@@ -233,7 +234,6 @@ class Modele:
             1: max_hp(),
         }
         return RECOMPENSES_TYPES[recompense_id]
-        
 
     def creer_boss(self, boss_id): # génère un boss aléatoire pour le niveau
         BOSS_TYPES = {
@@ -246,7 +246,7 @@ class Modele:
         RESSOURCE_TYPES = {
             1: Bouclier()
         }
-        return
+        return RESSOURCE_TYPES[ressource_id]
         
     def mise_a_jour(self):
         self.vaisseau.mise_a_jour()
@@ -347,6 +347,13 @@ class Modele:
                     random.randint(3, 6)
                 )
                 self.asteroides.append(nouvel_ast)
+
+            # Apparition aléatoire des ressoruces
+            alea_ressource = random.random()
+            if alea_ressource < 0.005:
+                ressource_id = 1
+                
+
 
             # Déplacement des ennemis
             for o in self.ovnis:
