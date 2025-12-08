@@ -18,15 +18,15 @@ class Projectile:
 
     def mise_a_jour(self):
         self.y += self.vitesse
-    def appliquer_degat(self, target):
-        if hasattr(target, 'bouclier'):
+    def appliquer_degat(self, cible):
+        if hasattr(cible, 'bouclier'):
             # target est le vaisseau
-            if target.bouclier > 0:
-                target.bouclier -= 1
+            if cible.bouclier > 0:
+                cible.bouclier -= 1
             else: 
-                target.hp -= self.dommage
+                cible.hp -= self.dommage
             return
-        target.hp -= self.dommage
+        cible.hp -= self.dommage
 
 class Vaisseau:
     def __init__(self,parent, x, y):
@@ -51,8 +51,18 @@ class Vaisseau:
         nouveau_proj = Projectile(self.x, self.y - 20, "g")
         self.projectiles.append(nouveau_proj)
 
+    def collision_vaisseau(self, cible):
+        if self.invincible == False:
+            print(self.bouclier)
+            if self.bouclier > 0:
+                self.bouclier -= 1
+                cible.hp -= self.dommage_collision
+            else:
+                self.hp -= cible.dommage_collision
+                cible.hp -= self.dommage_collision
+
     def mise_a_jour(self):
-        if self.hp <= 0:                                #######################################################
+        if self.hp <= 0:                             
             self.vie -=1
             self.hp = self.maxHp
             self.parent.invincibilite()
@@ -195,8 +205,6 @@ class Modele:
         self.recompense_id = None
         self.estCommence = False
         
-        
-        
     def invincibilite(self):
         self.vaisseau.x = self.largeur // 2
         self.vaisseau.y = self.hauteur - 50
@@ -212,13 +220,10 @@ class Modele:
         if(self.vaisseau.invincible):
             if self.conteur_invincibilite >= 2:
                 self.vaisseau.invincible = False
-                print(self.vaisseau.invincible)
             self.conteur_invincibilite += 1 * 0.03
-            print(self.vaisseau.invincible)
             
-        
         if self.boss == None:
-            if self.frames >= 10:                   # Temp entre chaque vague
+            if self.frames >= 15:                   # Temp entre chaque vague
                 self.frames = 0
                 self.round += 1
                 self.prochaine_round()
@@ -246,7 +251,6 @@ class Modele:
         self.boss_id = None
         self.boss_od = None
         self.vaisseau.hp = self.vaisseau.maxHp # vaisseau regagne hp entre niveau
-        print(self.vaisseau.hp,self.vaisseau.maxHp)
         self.vaisseau.projectiles = []
         self.definir_niveau()
         
@@ -305,7 +309,6 @@ class Modele:
                             p.x >= o.x - o.taille_x):
                                 if p.y - p.taille_y <= o.y + o.taille_y:
                                     p.appliquer_degat(o) #hp ovnis - dommage projectile
-                                    print(o.hp)
                                     p.alive = False
                     if self.boss != None:
                         if (p.x <= b.x + b.taille_x and 
@@ -321,9 +324,9 @@ class Modele:
                             p.x >= self.vaisseau.x - self.vaisseau.taille_x):
                                 if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and p.y - p.taille_y <= self.vaisseau.y + self.vaisseau.taille_y:
                                     if not self.vaisseau.invincible:
+                                        p.appliquer_degat(self.vaisseau)
                                         p.alive = False
-                                        self.vaisseau.hp -= p.dommage #hp vaisseau - dommage projectile
-
+                                        
             #Verifie si projectile boss touche vaisseau
             if self.boss != None:
                 for p in self.boss.projectiles:
@@ -332,7 +335,7 @@ class Modele:
                                 if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and p.y - p.taille_y <= self.vaisseau.y + self.vaisseau.taille_y:
                                     if not self.vaisseau.invincible:
                                         p.alive = False
-                                        self.vaisseau.hp -= p.dommage
+                                        p.appliquer_degat(self.vaisseau)
 
             #Verifie si projectile vaisseau touche asteroides
             for p in self.vaisseau.projectiles:
@@ -341,7 +344,7 @@ class Modele:
                         if (p.x <= a.x + a.taille_x and 
                             p.x >= a.x - a.taille_x):
                                 if p.y - p.taille_y <= a.y + a.taille_y:
-                                    a.hp -= p.dommage #hp asteroides - dommage projectile
+                                    p.appliquer_degat(a) #hp asteroides - dommage projectile
                                     p.alive = False
 
             #Vérifie si ovnis ou boss touche vaisseau
@@ -350,17 +353,13 @@ class Modele:
                     o.x - o.taille_x <= self.vaisseau.x + self.vaisseau.taille_x):
                     if (o.y + o.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and
                         o.y - o.taille_y <= self.vaisseau.y + self.vaisseau.taille_y):
-                            if not self.vaisseau.invincible:
-                                o.hp -= self.vaisseau.dommage_collision
-                                self.vaisseau.hp -= o.dommage_collision
+                            self.vaisseau.collision_vaisseau(o)
             if b != None:
                 if (b.x + b.taille_x >= self.vaisseau.x - self.vaisseau.taille_x and 
                     b.x - b.taille_x <= self.vaisseau.x + self.vaisseau.taille_x):
                     if (b.y + b.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and
                         b.y - b.taille_y <= self.vaisseau.y + self.vaisseau.taille_y):
-                            if not self.vaisseau.invincible:
-                                b.hp -= self.vaisseau.dommage_collision
-                                self.vaisseau.hp -= b.dommage_collision
+                            self.vaisseau.collision_vaisseau(b)
 
             #Vérifie si vaisseau touche astéroides
             for a in self.asteroides:
@@ -368,9 +367,7 @@ class Modele:
                     a.x - a.taille_x <= self.vaisseau.x + self.vaisseau.taille_x):
                     if (a.y + a.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and
                         a.y - a.taille_y <= self.vaisseau.y + self.vaisseau.taille_y):
-                            if not self.vaisseau.invincible:
-                                a.hp -= self.vaisseau.dommage_collision
-                                self.vaisseau.hp -= a.dommage_collision
+                            self.vaisseau.collision_vaisseau(a)
 
             # Vaisseau déplace vers souris même sans mouvement de souris
             self.vaisseau.deplacer(self.souris_x, self.souris_y)
@@ -400,7 +397,6 @@ class Modele:
                 ressource_id = 1
                 nouvelle_res = self.creer_ressource(ressource_id, self.vaisseau)
                 self.ressources.append(nouvelle_res)
-                print(nouvelle_res)
             # Déplacement des objets
             # Ennemis
             for o in self.ovnis:
