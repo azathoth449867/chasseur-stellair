@@ -22,7 +22,7 @@ class Projectile:
     ()
 
 class Vaisseau:
-    def __init__(self, x, y):
+    def __init__(self,parent, x, y):
         self.x = x
         self.y = y
         self.vie = 3
@@ -33,6 +33,8 @@ class Vaisseau:
         self.maxHp = 30
         self.dommage_collision = 20
         self.bouclier = 0
+        self.invincible = False
+        self.parent = parent
 
     def deplacer(self, x, y):
         self.x += (x - self.x) * 0.14
@@ -45,7 +47,8 @@ class Vaisseau:
     def mise_a_jour(self):
         if self.hp <= 0:                                #######################################################
             self.vie -=1
-            self.hp = 10
+            self.hp = self.maxHp
+            self.parent.invincibilite()
 
         for p in self.projectiles:
             p.mise_a_jour()
@@ -159,7 +162,7 @@ class Modele:
         self.parent = parent
         self.largeur = 600
         self.hauteur = 700
-        self.vaisseau = Vaisseau(self.largeur // 2, self.hauteur - 50)
+        self.vaisseau = Vaisseau( self ,self.largeur // 2, self.hauteur - 50)
         self.boss = None
         self.ovnis = []
         self.asteroides = []
@@ -179,6 +182,12 @@ class Modele:
         self.recompense_id = None
         self.estCommence = False
         
+        
+    def invincibilite(self):
+        self.vaisseau.x = self.largeur // 2
+        self.vaisseau.y = self.hauteur - 50
+        self.conteur_invincibilite = 0
+        self.vaisseau.invincible = True
 
     def deplacer_vaisseau(self,x, y):
         self.souris_x, self.souris_y = x, y
@@ -186,6 +195,14 @@ class Modele:
         self.vaisseau.tirer()
     def incrementer_jeu(self):
         self.frames += 1 * 0.03
+        if(self.vaisseau.invincible):
+            if self.conteur_invincibilite >= 2:
+                self.vaisseau.invincible = False
+                print(self.vaisseau.invincible)
+            self.conteur_invincibilite += 1 * 0.03
+            print(self.vaisseau.invincible)
+            
+        
         if self.boss == None:
             if self.frames >= 5:                   # Temp entre chaque vague
                 self.frames = 0

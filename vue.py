@@ -200,8 +200,9 @@ class Vue:
         self.label_niveau.config(text=f"Niveau : {modele.niveau}")
         self.label_vague.config(text=f"Vagues : {modele.round}")
         self.label_apparationRate.config(text=f"Apparation Rate : {modele.apparationRate}")
-        self.label_pv.config(text=f"Pv : {self.modele.vaisseau.hp}")
-        self.label_score.config(text=f"Score : {self.modele.score}")
+        if(not self.modele.game_over):
+            self.label_pv.config(text=f"Pv : {self.modele.vaisseau.hp}")
+            self.label_score.config(text=f"Score : {self.modele.score}")
 
     def deplacer_vaisseau(self,evt):
         # on pourrait vouloir le déplacer en y aussi
