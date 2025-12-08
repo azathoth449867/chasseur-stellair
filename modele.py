@@ -18,6 +18,8 @@ class Projectile:
 
     def mise_a_jour(self):
         self.y += self.vitesse
+    
+    ()
 
 class Vaisseau:
     def __init__(self, x, y):
@@ -30,6 +32,7 @@ class Vaisseau:
         self.hp = 30
         self.maxHp = 30
         self.dommage_collision = 20
+        self.bouclier = 0
 
     def deplacer(self, x, y):
         self.x += (x - self.x) * 0.14
@@ -113,7 +116,6 @@ class DoubleCannon(Boss):
     def __init__(self):
         super().__init__(3, 20, 30, 20)
         
-
     def tirer(self):
         nouveau_proj = Projectile(self.x, self.y + 20, "b")
         self.projectiles.append(nouveau_proj)
@@ -130,6 +132,25 @@ class Asteroide:
 
     def mise_a_jour(self):
         self.y += self.vy
+
+class Ressource:
+    def __init__(self, x, vy):
+        self.x = x
+        self.y = -5
+        self.vy = vy
+        self.taille_x = 12
+        self.taille_y = 12
+    
+    def mise_a_jour(self):
+        self.y += self.vy
+    def appliquer_buff(self):
+        pass
+
+class Bouclier(Ressource):
+    def __init__(self, x):
+        super().__init__(x, 0.8)
+    def appliquer_buff(self):
+        self.vaisseau.bouclier += 1
 
 # ------------------ MODÈLE ------------------
 
@@ -177,7 +198,6 @@ class Modele:
             if self.boss.estVivant == False:
                 self.score += 10
                 self.appliquer_recompense(self.recompense_id)
-                print(self.vaisseau.hp)
                 self.prochain_niveau()
                     
     def pause_compteur(self):
@@ -221,6 +241,12 @@ class Modele:
         }
         self.vaisseau.projectiles = [] # vide projectiles existants
         return BOSS_TYPES[boss_id]
+    
+    def creer_ressource(self, ressource_id):
+        RESSOURCE_TYPES = {
+            1: Bouclier()
+        }
+        return
         
     def mise_a_jour(self):
         self.vaisseau.mise_a_jour()
