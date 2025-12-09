@@ -205,6 +205,15 @@ class Modele:
         self.recompense_id = None
         self.estCommence = False
         
+
+    def enregistrer(self):
+        # with open("log.txt", "a") as file:   
+        #     file.write(f"{self.score},{self.niveau},{self.round}") 
+        fichier = open("log.txt", "a")
+        fichier.write(f"{self.score},{self.niveau},{self.round} \n")
+        fichier.close()
+        print("enregistrer")
+
     def invincibilite(self):
         self.vaisseau.x = self.largeur // 2
         self.vaisseau.y = self.hauteur - 50
@@ -288,6 +297,7 @@ class Modele:
         self.vie = self.vaisseau.vie
         b = self.boss
         if self.vaisseau.vie == 0:
+            self.enregistrer()
             self.vaisseau = None       
             self.game_over = True
         if self.vaisseau != None:
