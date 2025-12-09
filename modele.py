@@ -3,11 +3,11 @@ import random
 # ------------------ CLASSES ------------------
 
 class Explosion:
-    def __init__(self, x, y, max_radius=30, steps=20):
+    def __init__(self, x, y, max_radius=30, steps=15):
         self.x = x
         self.y = y
         self.max_radius = max_radius
-        self.steps = steps
+        self.steps = steps  # vitesse de l'explosion
         self.step = 0
         self.circles = []
         self.radius = 0
@@ -278,7 +278,7 @@ class Modele:
             self.conteur_invincibilite += 1 * 0.03
             
         if self.boss == None:
-            if self.frames >= 2:                   # Temp entre chaque vague
+            if self.frames >= 15:                   # Temp entre chaque vague
                 self.frames = 0
                 self.round += 1
                 self.prochaine_round()
