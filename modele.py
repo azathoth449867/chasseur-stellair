@@ -275,6 +275,7 @@ class Modele:
         self.enPause = True
         self.apparationRate = 0.02 * (self.round * 0.5 + self.niveau)
         self.ressources = []
+        self.explosion = []
         
     def prochain_niveau(self):
         self.boss = None
@@ -464,6 +465,12 @@ class Modele:
             r for r in self.ressources
             if r.y < self.hauteur and r.alive == True
         ]
+
+        self.explosion = [
+            e for e in self.explosion
+            if e.step < e.steps
+        ]
+        print("24")
 
     def mouvement_objets(self):
         for o in self.ovnis:
