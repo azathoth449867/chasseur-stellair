@@ -28,18 +28,18 @@ class Projectile:
     def __init__(self, x, y, typeBullet):
         self.x = x
         self.y = y
-        self.vitesse = -10  # vers le haut
+        self.vx = 0
+        self.vy = -10  # vers le haut
         self.dommage = 5 # dommange de base
         self.taille_x = 2
         self.taille_y = 10
         self.goodBad = typeBullet
         self.alive = True
-
         if self.goodBad == "b":
-            self.vitesse = 10
+            self.vy = 10
 
     def mise_a_jour(self):
-        self.y += self.vitesse
+        self.y += self.vy
     def appliquer_degat(self, cible):
         if hasattr(cible, 'bouclier'):
             # target est le vaisseau
@@ -49,6 +49,14 @@ class Projectile:
                 cible.hp -= self.dommage
             return
         cible.hp -= self.dommage
+
+class Shotgun(Projectile):
+    def __init__(self, x, y, typeBullet, vx):
+        super().__init__(x, y, typeBullet)
+        self.vx = vx
+    def mise_a_jour(self):
+        self.y += self.vy
+        self.x += self.vx
 
 class Vaisseau:
     def __init__(self, parent, x, y):
@@ -64,13 +72,28 @@ class Vaisseau:
         self.bouclier = 0
         self.invincible = False
         self.parent = parent
-        self.arme = 0
+        self.arme = "Basic"
 
     def deplacer(self, x, y):
         self.x += (x - self.x) * 0.14
         self.y += (y - self.y) * 0.14
         
     def tirer(self):
+        if self.arme == "DoubleCannon":
+            proj_gauche = Projectile(self.x - 10, self.y - 20, "g")
+            proj_droite = Projectile(self.x + 10, self.y - 20, "g")
+            self.projectiles.append(proj_gauche)
+            self.projectiles.append(proj_droite)
+            return
+        elif self.arme == "Shotgun":
+            proj_gauche = Shotgun(self.x, self.y - 20, "g", -5)
+            proj_milieu = Shotgun(self.x, self.y - 20, "g", 0)
+            proj_droite = Shotgun(self.x, self.y - 20, "g", 5)
+            self.projectiles.append(proj_gauche)
+            self.projectiles.append(proj_milieu)
+            self.projectiles.append(proj_droite)
+            return
+        
         nouveau_proj = Projectile(self.x, self.y - 20, "g")
         self.projectiles.append(nouveau_proj)
 
@@ -250,12 +273,12 @@ class Modele:
     def incrementer_jeu(self):
         self.frames += 1 * 0.03
         if(self.vaisseau.invincible):
-            if self.conteur_invincibilite >= 2:
+            if self.conteur_invincibilite >= 5:
                 self.vaisseau.invincible = False
             self.conteur_invincibilite += 1 * 0.03
             
         if self.boss == None:
-            if self.frames >= 5:                   # Temp entre chaque vague
+            if self.frames >= 2:                   # Temp entre chaque vague
                 self.frames = 0
                 self.round += 1
                 self.prochaine_round()
@@ -290,23 +313,23 @@ class Modele:
         
     def definir_niveau(self):
         self.boss_id = 1 #random.randint(1, ...) pour futur boss et recompense
-        self.recompense_id = 1 
+        self.recompense_id = random.randint(1, 2)
         self.estCommence = True
         self.apparationRate = 0.02 * (self.round * 0.5 + self.niveau)
 
     def appliquer_recompense(self, recompense_id):
         def max_hp():
             self.vaisseau.maxHp += 5
-        def generer_arme(arme_id):
-            ARME_TYPES = {
-                1: "DoubleCannon"
-            }
-            return ARME_TYPES[arme_id]
-
+        def generer_arme():
+            arme = random.choice(["DoubleCannon", "Shotgun"])
+            while arme == self.vaisseau.arme:
+                arme = random.choice(["DoubleCannon", "Shotgun"])
+            self.vaisseau.arme = arme
         RECOMPENSES_TYPES = {
-            1: max_hp(),
+            1: max_hp,
+            2: generer_arme
         }
-        return RECOMPENSES_TYPES[recompense_id]
+        return RECOMPENSES_TYPES[recompense_id]()
 
     def creer_boss(self, boss_id): # génère un boss aléatoire pour le niveau
         BOSS_TYPES = {
