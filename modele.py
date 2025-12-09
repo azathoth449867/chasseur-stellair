@@ -376,19 +376,7 @@ class Modele:
         self.collisions_objets()
         self.collisions_projectiles()
         
-    def mise_a_jour(self):
-        self.vaisseau.mise_a_jour()
-        self.vie = self.vaisseau.vie
-        if self.vaisseau.vie == 0:
-            self.enregistrer()
-            self.vaisseau = None       
-            self.game_over = True
-            return
-        self.incrementer_jeu()
-        self.verifier_collisions()
-        # Vaisseau déplace vers souris même sans mouvement de souris
-        self.vaisseau.deplacer(self.souris_x, self.souris_y)
-                
+    def apparition_aléatoire(self):
         # Apparition aléatoire des ennemis
         alea_ovni = random.random()
         if alea_ovni < self.apparationRate:
@@ -414,40 +402,14 @@ class Modele:
             ressource_id = 1
             nouvelle_res = self.creer_ressource(ressource_id, self.vaisseau)
             self.ressources.append(nouvelle_res)
-        # Déplacement des objets
-        # Ennemis
-        for o in self.ovnis:
-            o.mise_a_jour()
-
-        for a in self.asteroides:
-            a.mise_a_jour()
-            
-        if self.boss != None:
-            self.boss.mise_a_jour()
-
-        # Ressources
-        for r in self.ressources:
-            r.mise_a_jour()
+        
         # Les ennemis tirent
         for o in self.ovnis:
             alea_frequence = random.random()
             if alea_frequence < 0.02:
                 o.tirer()
-    
-        for o in self.ovnis:
-            o.mouvement_projectile()
-        
-        if self.boss != None:
-            if self.boss.enTire == True:
-                if self.boss.attackFrequence == 5:
-                    self.boss.tirer()
-                    self.boss.attackFrequence = 0
-                self.boss.attackFrequence += 1
-            if self.frames >= 5:
-                self.boss.enTire = not self.boss.enTire
-                self.frames = 0   
-            self.boss.mouvement_projectile()
-            
+
+    def calculer_score(self):
         #Calcule des points
         for o in self.ovnis:
             if o.hp <= 0:
@@ -456,6 +418,7 @@ class Modele:
             if a.hp <= 0:
                 self.score += 1
 
+    def nettoyage(self):
         # Nettoyage des objets sortis de l'écran
         self.ovnis = [
             o for o in self.ovnis
@@ -471,4 +434,52 @@ class Modele:
             r for r in self.ressources
             if r.y < self.hauteur and r.alive == True
         ]
+
+    def mouvement_objets(self):
+        for o in self.ovnis:
+            o.mise_a_jour()
+
+        for a in self.asteroides:
+            a.mise_a_jour()
+            
+        if self.boss != None:
+            self.boss.mise_a_jour()
+
+        # Ressources
+        for r in self.ressources:
+            r.mise_a_jour()
+
+    def mouvement_projectiles(self):
+        for o in self.ovnis:
+            o.mouvement_projectile()
+        
+        if self.boss != None:
+            if self.boss.enTire == True:
+                if self.boss.attackFrequence == 5:
+                    self.boss.tirer()
+                    self.boss.attackFrequence = 0
+                self.boss.attackFrequence += 1
+            if self.frames >= 5:
+                self.boss.enTire = not self.boss.enTire
+                self.frames = 0   
+            self.boss.mouvement_projectile()
+
+    def mise_a_jour(self):
+        self.vaisseau.mise_a_jour()
+        self.vie = self.vaisseau.vie
+        if self.vaisseau.vie == 0:
+            self.enregistrer()
+            self.vaisseau = None       
+            self.game_over = True
+            return
+        self.incrementer_jeu()
+        self.verifier_collisions()
+        self.vaisseau.deplacer(self.souris_x, self.souris_y)
+        self.apparition_aléatoire()
+        self.mouvement_objets()
+        self.mouvement_projectiles()
+        self.calculer_score()
+        self.nettoyage()
+
+        
 
