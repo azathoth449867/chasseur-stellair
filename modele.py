@@ -94,7 +94,6 @@ class Vaisseau:
 
     def collision_vaisseau(self, cible):
         if self.invincible == False:
-            print(self.bouclier)
             if self.bouclier > 0:
                 self.bouclier -= 1
                 cible.hp -= self.dommage_collision
@@ -397,7 +396,6 @@ class Modele:
                             r.x >= self.vaisseau.x - self.vaisseau.taille_x):
                                 if r.y + r.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and r.y - r.taille_y <= self.vaisseau.y + self.vaisseau.taille_y:
                                     r.contact_vaisseau()
-                                    print(self.vaisseau.bouclier)
 
             #Vérifie si ovnis ou boss touche vaisseau
             for o in self.ovnis:
@@ -488,7 +486,7 @@ class Modele:
             e for e in self.explosion
             if e.step < e.steps
         ]
-       
+
     def mouvement_objets(self):
         for o in self.ovnis:
             o.mise_a_jour()
@@ -542,6 +540,3 @@ class Modele:
         self.calculer_score()
         self.generer_explosion()
         self.nettoyage()
-
-        
-
