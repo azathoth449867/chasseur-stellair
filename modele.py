@@ -174,7 +174,7 @@ class Boss:
 
 class DoubleCannon(Boss):
     def __init__(self):
-        super().__init__(3, 20, 30, 20)
+        super().__init__(3, 20, 30, 200)
         
     def tirer(self):
         proj_gauche = Projectile(self.x - 10, self.y + 20, "b")
@@ -252,7 +252,6 @@ class Modele:
         fichier = open("log.txt", "a")
         fichier.write(f"{self.score},{self.niveau},{self.round} \n")
         fichier.close()
-        print("enregistrer")
 
     def invincibilite(self):
         self.vaisseau.x = self.largeur // 2
