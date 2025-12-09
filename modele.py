@@ -29,7 +29,7 @@ class Projectile:
         cible.hp -= self.dommage
 
 class Vaisseau:
-    def __init__(self,parent, x, y):
+    def __init__(self, parent, x, y):
         self.x = x
         self.y = y
         self.vie = 3
@@ -42,6 +42,7 @@ class Vaisseau:
         self.bouclier = 0
         self.invincible = False
         self.parent = parent
+        self.arme = 0
 
     def deplacer(self, x, y):
         self.x += (x - self.x) * 0.14
@@ -204,7 +205,6 @@ class Modele:
         self.boss_id = None
         self.recompense_id = None
         self.estCommence = False
-        
 
     def enregistrer(self):
         # with open("log.txt", "a") as file:   
@@ -251,6 +251,7 @@ class Modele:
     def prochaine_round(self):
         self.enPause = True
         self.apparationRate = 0.02 * (self.round * 0.5 + self.niveau)
+        self.ressources = []
         
     def prochain_niveau(self):
         self.boss = None
@@ -261,6 +262,7 @@ class Modele:
         self.boss_od = None
         self.vaisseau.hp = self.vaisseau.maxHp # vaisseau regagne hp entre niveau
         self.vaisseau.projectiles = []
+        self.ressources = []
         self.definir_niveau()
         
     def definir_niveau(self):
@@ -272,6 +274,11 @@ class Modele:
     def appliquer_recompense(self, recompense_id):
         def max_hp():
             self.vaisseau.maxHp += 5
+        def generer_arme(arme_id):
+            ARME_TYPES = {
+                1: "DoubleCannon"
+            }
+            return ARME_TYPES[arme_id]
 
         RECOMPENSES_TYPES = {
             1: max_hp(),
@@ -291,7 +298,7 @@ class Modele:
             1: Bouclier(vaisseau, x)
         }
         return RESSOURCE_TYPES[ressource_id]
-    
+
     def collisions_projectiles(self):
             b = self.boss
          #Verifie si projectile vaisseau touche ovnis ou boss
