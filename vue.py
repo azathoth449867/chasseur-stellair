@@ -10,6 +10,7 @@ class Vue:
         self.creer_fenetre_principale()
         self.creer_frame_canevas()
         self.creer_frame_infos()
+        self.creer_frame_attribut()
 
     # ---------- Création de l'interface ----------
     def creer_fenetre_principale(self):
@@ -48,7 +49,10 @@ class Vue:
 
         self.btn_rejouer = tk.Button(self.frame_infos, text="Rejouer", command=self.rejouer)
         self.btn_rejouer.pack(pady=10)
-        #####
+        
+        
+
+    def creer_frame_attribut(self):
         self.frame_attribut = tk.Frame(self.frame_principale, bg="#b03c32")
         self.frame_attribut.place(x=604, y=225, width=175)
 
@@ -63,6 +67,9 @@ class Vue:
         
         self.label_score = tk.Label(self.frame_attribut, text=f"Score : {self.modele.score}", fg="white", bg="#b03c32", font=("Arial", 12))
         self.label_score.pack(pady=10)
+
+        self.label_bouclier = tk.Label(self.frame_attribut, text=f"Bouclier : {self.modele.vaisseau.bouclier}", fg="white", bg="#b03c32", font=("Arial", 12))
+        self.label_bouclier.pack(pady=10)
 
     def piloter(self):
         self.controleur.commencer()
@@ -206,6 +213,7 @@ class Vue:
         if(not self.modele.game_over):
             self.label_pv.config(text=f"Pv : {self.modele.vaisseau.hp}")
             self.label_score.config(text=f"Score : {self.modele.score}")
+            self.label_bouclier.config(text=f"Bouclier : {self.modele.vaisseau.bouclier}")
 
     def deplacer_vaisseau(self,evt):
         # on pourrait vouloir le déplacer en y aussi
