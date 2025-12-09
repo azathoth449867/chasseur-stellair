@@ -2,6 +2,28 @@ import random
 
 # ------------------ CLASSES ------------------
 
+class Explosion:
+    def __init__(self, x, y, max_radius=30, steps=20):
+        self.x = x
+        self.y = y
+        self.max_radius = max_radius
+        self.steps = steps
+        self.step = 0
+        self.circles = []
+        self.radius = 0
+        self.color = None
+        self.mise_a_jour()
+    
+    def mise_a_jour(self):
+        self.radius = (self.step / self.steps) * self.max_radius
+        self.color = random.choice(["yellow", "orange", "red", "white"])
+        self.step += 1
+        
+
+
+
+
+
 class Projectile:
     def __init__(self, x, y, typeBullet):
         self.x = x
@@ -205,6 +227,7 @@ class Modele:
         self.boss_id = None
         self.recompense_id = None
         self.estCommence = False
+        self.explosion = []
 
     def enregistrer(self):
         # with open("log.txt", "a") as file:   
@@ -471,6 +494,11 @@ class Modele:
                 self.frames = 0   
             self.boss.mouvement_projectile()
 
+    def generer_explosion(self):
+        for o in self.ovnis:
+            if o.hp <= 0:
+                self.explosion.append(Explosion(o.x,o.y))
+
     def mise_a_jour(self):
         self.vaisseau.mise_a_jour()
         if self.vaisseau.vie == 0:
@@ -485,6 +513,7 @@ class Modele:
         self.mouvement_objets()
         self.mouvement_projectiles()
         self.calculer_score()
+        self.generer_explosion()
         self.nettoyage()
 
         

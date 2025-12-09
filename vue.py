@@ -89,6 +89,26 @@ class Vue:
             self.canevas.create_text(300,260,text=f"Niveau : {self.modele.niveau}", font=("Arial", 30, "bold"), fill="yellow")
             self.canevas.create_text(300,300,text=f"Round : {self.modele.round}", font=("Arial", 20, "bold"), fill="white")
 
+
+    def afficher_explosion(self):
+        exp = self.modele.explosion
+        
+
+        for e in exp:
+            if e.step > e.steps:
+                for c in e.circles:
+                    self.canevas.delete(c)
+                continue
+            cc = self.canevas.create_oval(
+            e.x - e.radius,
+            e.y - e.radius,
+            e.x + e.radius,
+            e.y + e.radius,
+            fill= e.color,
+            outline=""
+            )
+            e.circles.append(cc)
+            e.mise_a_jour()
     # ---------- Affichage du jeu ----------
     def afficher_jeu(self):
         modele = self.modele
@@ -181,6 +201,8 @@ class Vue:
                 fill="yellow",
                 width=2
             )
+
+        self.afficher_explosion()
 
         # --- Boss ---
         if (b != None):
