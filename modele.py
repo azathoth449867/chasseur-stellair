@@ -273,11 +273,7 @@ class Modele:
             self.conteur_invincibilite += 1 * 0.03
             
         if self.boss == None:
-<<<<<<< HEAD
             if self.frames >= 15:                   # Temp entre chaque vague
-=======
-            if self.frames >= 5:                   # Temp entre chaque vague
->>>>>>> 988a09978f03946efc7e1f4d42896efc8fa15a0e
                 self.frames = 0
                 self.round += 1
                 self.prochaine_round()
@@ -492,8 +488,7 @@ class Modele:
             e for e in self.explosion
             if e.step < e.steps
         ]
-        print("24")
-
+       
     def mouvement_objets(self):
         for o in self.ovnis:
             o.mise_a_jour()
@@ -527,6 +522,9 @@ class Modele:
         for o in self.ovnis:
             if o.hp <= 0:
                 self.explosion.append(Explosion(o.x,o.y))
+        for a in self.asteroides:
+            if a.hp <= 0:
+                self.explosion.append(Explosion(a.x,a.y, 45))
 
     def mise_a_jour(self):
         self.vaisseau.mise_a_jour()

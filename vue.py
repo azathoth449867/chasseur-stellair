@@ -163,7 +163,7 @@ class Vue:
                     p.y - p.taille_y,
                     p.x + p.taille_x,
                     p.y,
-                    fill="yellow"
+                    fill="red"
                     )
 
             if modele.boss != None:
