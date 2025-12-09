@@ -466,7 +466,6 @@ class Modele:
 
     def mise_a_jour(self):
         self.vaisseau.mise_a_jour()
-        self.vie = self.vaisseau.vie
         if self.vaisseau.vie == 0:
             self.enregistrer()
             self.vaisseau = None       

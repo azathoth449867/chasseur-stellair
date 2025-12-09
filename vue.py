@@ -92,52 +92,31 @@ class Vue:
         b = modele.boss
         if modele.vaisseau != None:
             v = modele.vaisseau
-            if not v.invincible:
-                self.canevas.create_rectangle(
-                    v.x - v.taille_x,
-                    v.y - 5,
-                    v.x + v.taille_x,
-                    v.y + 5,
-                    fill="blue"
-                )
-                self.canevas.create_oval(
-                    v.x - (v.taille_x // 2),
-                    v.y - v.taille_y,
-                    v.x + (v.taille_x // 2),
-                    v.y - 5,
-                    fill="lightblue"
-                )
-                self.canevas.create_line(
-                    v.x,
-                    v.y - v.taille_y,
-                    v.x,
-                    v.y - v.taille_y - 5,
-                    fill="white",
-                    width=2
-                )
-            else:
-                self.canevas.create_rectangle(
-                    v.x - v.taille_x,
-                    v.y - 5,
-                    v.x + v.taille_x,
-                    v.y + 5,
-                    fill="yellow",
-                )
-                self.canevas.create_oval(
-                    v.x - (v.taille_x // 2),
-                    v.y - v.taille_y,
-                    v.x + (v.taille_x // 2),
-                    v.y - 5,
-                    fill="lightyellow",
-                )
-                self.canevas.create_line(
-                    v.x,
-                    v.y - v.taille_y,
-                    v.x,
-                    v.y - v.taille_y - 5,
-                    fill="white",
-                    width=2
-                )
+            couleur1 = "blue" if not v.invincible else "yellow" 
+            couleur2 = "lightblue" if not v.invincible else "lightyellow"
+            self.canevas.create_rectangle(
+                v.x - v.taille_x,
+                v.y - 5,
+                v.x + v.taille_x,
+                v.y + 5,
+                fill=couleur1
+            )
+            self.canevas.create_oval(
+                v.x - (v.taille_x // 2),
+                v.y - v.taille_y,
+                v.x + (v.taille_x // 2),
+                v.y - 5,
+                fill=couleur2
+            )
+            self.canevas.create_line(
+                v.x,
+                v.y - v.taille_y,
+                v.x,
+                v.y - v.taille_y - 5,
+                fill="white",
+                width=2
+            )
+            
 
 
         # --- Projectiles ---
@@ -220,7 +199,7 @@ class Vue:
             self.canevas.create_oval(r.x - r.taille_x, r.y - r.taille_y, r.x + r.taille_x, r.y + r.taille_y, fill="blue")
 
         # --- Infos ---
-        self.label_vie.config(text=f"Vies : {modele.vie}")
+        self.label_vie.config(text=f"Vies : {modele.vaisseau.vie}")
         self.label_niveau.config(text=f"Niveau : {modele.niveau}")
         self.label_vague.config(text=f"Vagues : {modele.round}")
         self.label_apparationRate.config(text=f"Apparation Rate : {modele.apparationRate}")
