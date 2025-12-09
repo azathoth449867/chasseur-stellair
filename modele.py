@@ -19,11 +19,6 @@ class Explosion:
         self.color = random.choice(["yellow", "orange", "red", "white"])
         self.step += 1
         
-
-
-
-
-
 class Projectile:
     def __init__(self, x, y, typeBullet):
         self.x = x
@@ -183,9 +178,11 @@ class DoubleCannon(Boss):
         super().__init__(3, 20, 30, 20)
         
     def tirer(self):
-        nouveau_proj = Projectile(self.x, self.y + 20, "b")
-        self.projectiles.append(nouveau_proj)
-        
+        proj_gauche = Projectile(self.x - 10, self.y + 20, "b")
+        proj_droite = Projectile(self.x + 10, self.y + 20, "b")
+        self.projectiles.append(proj_gauche)
+        self.projectiles.append(proj_droite)
+
 class Asteroide:
     def __init__(self, x, y, vy):
         self.x = x
@@ -253,8 +250,6 @@ class Modele:
         self.explosion = []
 
     def enregistrer(self):
-        # with open("log.txt", "a") as file:   
-        #     file.write(f"{self.score},{self.niveau},{self.round}") 
         fichier = open("log.txt", "a")
         fichier.write(f"{self.score},{self.niveau},{self.round} \n")
         fichier.close()
@@ -278,7 +273,11 @@ class Modele:
             self.conteur_invincibilite += 1 * 0.03
             
         if self.boss == None:
+<<<<<<< HEAD
             if self.frames >= 15:                   # Temp entre chaque vague
+=======
+            if self.frames >= 5:                   # Temp entre chaque vague
+>>>>>>> 988a09978f03946efc7e1f4d42896efc8fa15a0e
                 self.frames = 0
                 self.round += 1
                 self.prochaine_round()
