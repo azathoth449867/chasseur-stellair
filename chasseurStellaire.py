@@ -68,6 +68,5 @@ class Controleur:
         self.modele.estCommence = True
         self.boucle_jeu()
 
-
 if __name__ == "__main__":
     c = Controleur()

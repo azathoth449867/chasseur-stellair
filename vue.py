@@ -204,7 +204,7 @@ class Vue:
 
         # --- Boss ---
         if b != None:
-            #if b.nom == "DoubleCannon":
+            if b.nom == "DoubleCannon":
                 self.canevas.create_rectangle(b.x-20, b.y-10, b.x+20, b.y+10, fill="gray")
                 self.canevas.create_oval(b.x-15, b.y-3, b.x-10, b.y+2, fill="red")
                 self.canevas.create_oval(b.x+10, b.y-3, b.x+15, b.y+2, fill="blue")
@@ -212,10 +212,23 @@ class Vue:
                 self.canevas.create_rectangle(b.x-13, b.y+15, b.x-7, b.y+20, fill="orange")
                 self.canevas.create_rectangle(b.x+5, b.y+10, b.x+15, b.y+15, fill="orange")
                 self.canevas.create_rectangle(b.x+7, b.y+15, b.x+13, b.y+20, fill="orange")
+            elif b.nom == "Laser":
+                self.canevas.create_oval(b.x - b.taille_x, b.y - 0.6*b.taille_y, b.x + b.taille_x, b.y + 0.6*b.taille_y, fill="darkred", outline="grey", width=4)
+                self.canevas.create_oval(b.x - 0.5*b.taille_x, b.y - 0.3*b.taille_y, b.x - 0.2*b.taille_x, b.y + 0.1*b.taille_y, fill="purple", outline="magenta", width=2)
+                self.canevas.create_oval(b.x + 0.2*b.taille_x, b.y - 0.3*b.taille_y, b.x + 0.5*b.taille_x, b.y + 0.1*b.taille_y, fill="purple", outline="magenta", width=2)
+                self.canevas.create_rectangle(b.x - 0.2*b.taille_x, b.y + 0.6*b.taille_y, b.x + 0.2*b.taille_x, b.y + 1.8*b.taille_y, fill="darkslategray", width=3)
+                self.canevas.create_rectangle(b.x - 0.9*b.taille_x, b.y + 0.2*b.taille_y, b.x - 0.6*b.taille_x, b.y + 0.8*b.taille_y, fill="red")
+                self.canevas.create_rectangle(b.x + 0.6*b.taille_x, b.y + 0.2*b.taille_y, b.x + 0.9*b.taille_x, b.y + 0.8*b.taille_y, fill="red")
+                if b.enTire == True:
+                    self.canevas.create_oval(b.x - 0.3*b.taille_x, b.y + 1.8*b.taille_y, b.x + 0.3*b.taille_x, b.y + 2.2*b.taille_y, fill="red", outline="white")
+                else: 
+                    self.canevas.create_oval(b.x - 0.3*b.taille_x, b.y + 1.8*b.taille_y, b.x + 0.3*b.taille_x, b.y + 2.2*b.taille_y, fill="grey", outline="white")
+            #elif b.nom == "Fonceur":
+
 
         # --- Astéroïdes ---
         for a in modele.asteroides:
-            self.canevas.create_oval(a.x - a.taille_x, a.y - a.taille_y, a.x + a.taille_x, a.y + a.taille_y, fill="darkred")
+            self.canevas.create_oval(a.x - a.taille_x, a.y - a.taille_y, a.x + a.taille_x, a.y + a.taille_y, fill="grey")
         
             self.canevas.create_line(a.x, a.y-18, a.x, a.y-12, fill="red", width=3)
             self.canevas.create_line(a.x, a.y+12, a.x, a.y+18, fill="red", width=3)

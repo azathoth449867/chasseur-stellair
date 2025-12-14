@@ -57,7 +57,7 @@ class Beam(Projectile):
     def __init__(self, x, y, typeBullet):
         super().__init__(x, y, typeBullet)
     def mise_a_jour(self):
-        self.taille_y += self.vy
+        self.taille_y += self.vy * 2
 
 class Vaisseau:
     def __init__(self, parent, x, y):
@@ -169,15 +169,29 @@ class Boss:
         for p in self.projectiles: 
             p.mise_a_jour()
     def mise_a_jour(self):
-        self.x += self.vx
+        if isinstance(self, DoubleCannon):
+            self.x += self.vx
+        elif isinstance(self, Laser):
+            if not self.projectiles:
+                self.x += self.vx
+        elif isinstance(self, Fonceur):
+            self.x += self.vx
+            self.y += self.vy
+
+            if self.y >= 600 or self.y <= 50:
+                self.vy = -self.vy
+
         if self.hp <= 0: # check état de vie
             self.estVivant = False
+
         if self.x >= 500 or self.x <= 100:
             self.vx = -self.vx
+
         self.projectiles = [
                     p for p in self.projectiles
-                    if p.y < 700 and p.taille_y < 760 and p.alive
+                    if p.y < 700 and p.taille_y < 750 and p.alive
                 ]
+        
     def gunCooldown(self):
         if self.enTire == True:
                 if self.cooldown == 0:
@@ -203,13 +217,28 @@ class DoubleCannon(Boss):
     
 class Laser(Boss):
     def __init__(self, parent, niveau):
-        super().__init__(parent, 3, 20, 30, 500, niveau)
+        super().__init__(parent, 3, 30, 25, 500, niveau)
         self.nom = "Laser"
         self.maxCooldown = 8
 
     def tirer(self):
-        laser = Beam(self.x, self.y + 20, "b")
+        laser = Beam(self.x, self.y + 30, "b")
         self.projectiles.append(laser)
+
+class Fonceur(Boss):
+    def __init__(self, parent, niveau):
+        super().__init__(parent, 6, 25, 20, 500, niveau)
+        self.nom = "Fonceur"
+        self.maxCooldown = 5
+        self.vy = 15
+
+    def tirer(self):
+            proj_gauche = Shotgun(self.x, self.y - 20, "b", -5)
+            proj_milieu = Shotgun(self.x, self.y - 20, "b", 0)
+            proj_droite = Shotgun(self.x, self.y - 20, "b", 5)
+            self.projectiles.append(proj_gauche)
+            self.projectiles.append(proj_milieu)
+            self.projectiles.append(proj_droite)
 
 class Asteroide:
     def __init__(self, x, y, vy):
@@ -265,6 +294,7 @@ class Modele:
         self.round = 1
         self.frames = 0
         self.apparationRate = 0.02
+        self.obstacleApparationRate = 0.02
         self.souris_x, self.souris_y = 300, 600
         self.tire = None
         self.enPause = False
@@ -306,8 +336,9 @@ class Modele:
                 self.prochaine_round()
         if self.round > 3:
             if self.boss == None:
-                self.boss = self.creer_boss(2)
+                self.boss = self.creer_boss(self.boss_id)
                 self.apparationRate = 0
+                self.obstacleApparationRate = 0
             if self.boss.estVivant == False:
                 self.score += 10
                 self.appliquer_recompense(self.recompense_id)
@@ -466,7 +497,8 @@ class Modele:
             self.ovnis.append(nouvel_ovni)
 
         alea_asteroide = random.random()
-        if alea_asteroide < 0.01:
+        if self.boss != None: self.obstacleApparationRate = 0.02 * (self.round * 0.5 + self.niveau)
+        if alea_asteroide < self.obstacleApparationRate:
             nouvel_ast = Asteroide(
                 random.randint(0, self.largeur),
                 0,
