@@ -53,6 +53,12 @@ class Shotgun(Projectile):
         self.y += self.vy
         self.x += self.vx
 
+class Beam(Projectile):
+    def __init__(self, x, y, typeBullet):
+        super().__init__(x, y, typeBullet)
+    def mise_a_jour(self):
+        self.taille_y += self.vy
+
 class Vaisseau:
     def __init__(self, parent, x, y):
         self.x = x
@@ -142,18 +148,19 @@ class OVNI:
                 ]
         
 class Boss:
-    def __init__(self, vx, taille_x, taille_y, hp):
+    def __init__(self, parent, vx, taille_x, taille_y, hp, niveau):
         self.x = 300
         self.y = 50
         self.vx = vx
         self.taille_x = taille_x
         self.taille_y = taille_y
         self.projectiles = []
-        self.hp = hp
+        self.hp = hp * niveau
         self.dommage_collision = 100
-        self.attackFrequence = 0
+        self.cooldown = 0
         self.estVivant = True
         self.enTire = True
+        self.parent = parent
 
     def tirer(self):
         nouveau_proj = Projectile(self.x, self.y + 20, "b")
@@ -169,18 +176,40 @@ class Boss:
             self.vx = -self.vx
         self.projectiles = [
                     p for p in self.projectiles
-                    if p.y < 700 and p.alive
+                    if p.y < 700 and p.taille_y < 760 and p.alive
                 ]
+    def gunCooldown(self):
+        if self.enTire == True:
+                if self.cooldown == 0:
+                    self.tirer()
+                    self.cooldown = self.maxCooldown
+                self.cooldown -= 1
+        if self.parent.frames >= 5:
+            self.enTire = not self.enTire
+            self.parent.frames = 0   
+        self.mouvement_projectile()
 
 class DoubleCannon(Boss):
-    def __init__(self):
-        super().__init__(3, 20, 30, 200)
+    def __init__(self, parent, niveau):
+        super().__init__(parent, 3, 20, 30, 200, niveau)
+        self.nom = "DoubleCannon"
+        self.maxCooldown = 3
         
     def tirer(self):
         proj_gauche = Projectile(self.x - 10, self.y + 20, "b")
         proj_droite = Projectile(self.x + 10, self.y + 20, "b")
         self.projectiles.append(proj_gauche)
         self.projectiles.append(proj_droite)
+    
+class Laser(Boss):
+    def __init__(self, parent, niveau):
+        super().__init__(parent, 3, 20, 30, 500, niveau)
+        self.nom = "Laser"
+        self.maxCooldown = 8
+
+    def tirer(self):
+        laser = Beam(self.x, self.y + 20, "b")
+        self.projectiles.append(laser)
 
 class Asteroide:
     def __init__(self, x, y, vy):
@@ -271,13 +300,13 @@ class Modele:
             self.conteur_invincibilite += 1 * 0.03
             
         if self.boss == None:
-            if self.frames >= 15:                   # Temp entre chaque vague
+            if self.frames >= 1:                   # Temp entre chaque vague
                 self.frames = 0
                 self.round += 1
                 self.prochaine_round()
         if self.round > 3:
             if self.boss == None:
-                self.boss = self.creer_boss(self.boss_id)
+                self.boss = self.creer_boss(2)
                 self.apparationRate = 0
             if self.boss.estVivant == False:
                 self.score += 10
@@ -306,7 +335,7 @@ class Modele:
         self.definir_niveau()
         
     def definir_niveau(self):
-        self.boss_id = 1 #random.randint(1, ...) pour futur boss et recompense
+        self.boss_id = random.randint(1, 2) 
         self.recompense_id = random.randint(1, 2)
         self.estCommence = True
         self.apparationRate = 0.02 * (self.round * 0.5 + self.niveau)
@@ -327,7 +356,8 @@ class Modele:
 
     def creer_boss(self, boss_id): # génère un boss aléatoire pour le niveau
         BOSS_TYPES = {
-            1: DoubleCannon()
+            1: DoubleCannon(self, self.niveau),
+            2: Laser(self, self.niveau)
         }
         self.vaisseau.projectiles = [] # vide projectiles existants
         return BOSS_TYPES[boss_id]
@@ -374,8 +404,10 @@ class Modele:
                             p.x >= self.vaisseau.x - self.vaisseau.taille_x):
                                 if p.y + p.taille_y >= self.vaisseau.y - self.vaisseau.taille_y and p.y - p.taille_y <= self.vaisseau.y + self.vaisseau.taille_y:
                                     if not self.vaisseau.invincible:
-                                        p.alive = False
+                                        if not isinstance(p, Beam):
+                                            p.alive = False
                                         p.appliquer_degat(self.vaisseau)
+                                        
 
             #Verifie si projectile vaisseau touche asteroides
             for p in self.vaisseau.projectiles:
@@ -505,15 +537,7 @@ class Modele:
             o.mouvement_projectile()
         
         if self.boss != None:
-            if self.boss.enTire == True:
-                if self.boss.attackFrequence == 5:
-                    self.boss.tirer()
-                    self.boss.attackFrequence = 0
-                self.boss.attackFrequence += 1
-            if self.frames >= 5:
-                self.boss.enTire = not self.boss.enTire
-                self.frames = 0   
-            self.boss.mouvement_projectile()
+            self.boss.gunCooldown()
 
     def generer_explosion(self):
         for o in self.ovnis:
