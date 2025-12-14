@@ -223,8 +223,21 @@ class Vue:
                     self.canevas.create_oval(b.x - 0.3*b.taille_x, b.y + 1.8*b.taille_y, b.x + 0.3*b.taille_x, b.y + 2.2*b.taille_y, fill="red", outline="white")
                 else: 
                     self.canevas.create_oval(b.x - 0.3*b.taille_x, b.y + 1.8*b.taille_y, b.x + 0.3*b.taille_x, b.y + 2.2*b.taille_y, fill="grey", outline="white")
-            #elif b.nom == "Fonceur":
-
+            elif b.nom == "Fonceur":
+                self.canevas.create_oval(b.x - b.taille_x, b.y - 0.75*b.taille_y, b.x + b.taille_x, b.y + 0.75*b.taille_y, fill="darkorange", outline="orangered", width=4)
+                self.canevas.create_oval(b.x - 0.6*b.taille_x, b.y - 0.55*b.taille_y, b.x + 0.6*b.taille_x, b.y + 0.55*b.taille_y, fill="orange")
+                self.canevas.create_oval(b.x - 0.35*b.taille_x, b.y - 0.45*b.taille_y, b.x - 0.15*b.taille_x, b.y - 0.25*b.taille_y, fill="yellow", outline="orange", width=2)
+                self.canevas.create_oval(b.x + 0.15*b.taille_x, b.y - 0.45*b.taille_y, b.x + 0.35*b.taille_x, b.y - 0.25*b.taille_y, fill="yellow", outline="orange", width=2)
+                self.canevas.create_rectangle(b.x - b.taille_x, b.y - 0.3*b.taille_y, b.x - 0.75*b.taille_x, b.y + 0.75*b.taille_y, fill="sienna")
+                self.canevas.create_rectangle(b.x + 0.75*b.taille_x, b.y - 0.3*b.taille_y, b.x + b.taille_x, b.y + 0.75*b.taille_y, fill="sienna")
+                self.canevas.create_rectangle(b.x - 0.65*b.taille_x, b.y + 0.6*b.taille_y, b.x - 0.4*b.taille_x, b.y + 1.7*b.taille_y, fill="dimgray")
+                self.canevas.create_rectangle(b.x - 0.6*b.taille_x, b.y + 1.7*b.taille_y, b.x - 0.45*b.taille_x, b.y + 2.0*b.taille_y, fill="orangered")
+                self.canevas.create_rectangle(b.x - 0.15*b.taille_x, b.y + 0.6*b.taille_y, b.x + 0.15*b.taille_x, b.y + 1.7*b.taille_y, fill="dimgray")
+                self.canevas.create_rectangle(b.x - 0.1*b.taille_x, b.y + 1.7*b.taille_y, b.x + 0.1*b.taille_x, b.y + 2.0*b.taille_y, fill="orangered")
+                self.canevas.create_rectangle(b.x + 0.4*b.taille_x, b.y + 0.6*b.taille_y, b.x + 0.65*b.taille_x, b.y + 1.7*b.taille_y, fill="dimgray")
+                self.canevas.create_rectangle(b.x + 0.45*b.taille_x, b.y + 1.7*b.taille_y, b.x + 0.6*b.taille_x, b.y + 2.0*b.taille_y, fill="orangered")
+                self.canevas.create_oval(b.x - 1.0*b.taille_x, b.y + 0.4*b.taille_y, b.x + 1.0*b.taille_x, b.y + 2.5*b.taille_y, outline="yellow", width=10, fill="")
+                self.canevas.create_oval(b.x - 0.85*b.taille_x, b.y + 0.5*b.taille_y, b.x + 0.85*b.taille_x, b.y + 2.3*b.taille_y, outline="orange", width=6, fill="")
 
         # --- Astéroïdes ---
         for a in modele.asteroides:

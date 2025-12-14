@@ -175,7 +175,7 @@ class Boss:
             if not self.projectiles:
                 self.x += self.vx
         elif isinstance(self, Fonceur):
-            self.x += self.vx
+            self.x += self.vx * 0.7
             self.y += self.vy
 
             if self.y >= 600 or self.y <= 50:
@@ -229,8 +229,8 @@ class Fonceur(Boss):
     def __init__(self, parent, niveau):
         super().__init__(parent, 6, 25, 20, 500, niveau)
         self.nom = "Fonceur"
-        self.maxCooldown = 5
-        self.vy = 15
+        self.maxCooldown = 12
+        self.vy = 7
 
     def tirer(self):
             proj_gauche = Shotgun(self.x, self.y - 20, "b", -5)
@@ -388,7 +388,8 @@ class Modele:
     def creer_boss(self, boss_id): # génère un boss aléatoire pour le niveau
         BOSS_TYPES = {
             1: DoubleCannon(self, self.niveau),
-            2: Laser(self, self.niveau)
+            2: Laser(self, self.niveau),
+            3: Fonceur(self, self.niveau)
         }
         self.vaisseau.projectiles = [] # vide projectiles existants
         return BOSS_TYPES[boss_id]
