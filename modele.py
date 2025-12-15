@@ -273,7 +273,7 @@ class Ressource:
 
 class Bouclier(Ressource):
     def __init__(self, vaisseau, x):
-        super().__init__(vaisseau, x, 0.75)
+        super().__init__(vaisseau, x, 0.95)
     def appliquer_buff(self):
         self.vaisseau.bouclier += 1
 
@@ -373,7 +373,7 @@ class Modele:
 
     def appliquer_recompense(self, recompense_id):
         def max_hp():
-            self.vaisseau.maxHp += 5
+            self.vaisseau.maxHp += 15
         def generer_arme():
             arme = random.choice(["DoubleCannon", "Shotgun"])
             while arme == self.vaisseau.arme:
@@ -509,7 +509,7 @@ class Modele:
 
         # Apparition aléatoire des ressoruces
         alea_ressource = random.random()
-        if alea_ressource < 0.005:
+        if alea_ressource < 0.0005:
             ressource_id = 1
             nouvelle_res = self.creer_ressource(ressource_id, self.vaisseau)
             self.ressources.append(nouvelle_res)
