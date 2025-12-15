@@ -66,6 +66,7 @@ class Controleur:
         self.vue.afficher_intervalle(type)
 
     def commencer(self):
+        self.modele.definir_niveau()
         self.modele.estCommence = True
         self.boucle_jeu()
 
