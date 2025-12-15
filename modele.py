@@ -198,7 +198,7 @@ class Boss:
                     self.tirer()
                     self.cooldown = self.maxCooldown
                 self.cooldown -= 1
-        if self.parent.frames >= 5:
+        if self.parent.frames >= 15:
             self.enTire = not self.enTire
             self.parent.frames = 0   
         self.mouvement_projectile()
@@ -303,7 +303,6 @@ class Modele:
         self.vie = 3
         self.game_over = False
         self.boss_id = 0
-        self.recompense_id = None
         self.estCommence = False
         self.explosion = []
 
@@ -341,7 +340,7 @@ class Modele:
                 self.obstacleApparationRate = 0
             if self.boss.estVivant == False:
                 self.score += 100 * self.niveau
-                self.appliquer_recompense(self.recompense_id)
+                self.appliquer_recompense()
                 self.prochain_niveau()
                     
     def pause_compteur(self):
@@ -369,11 +368,10 @@ class Modele:
             self.boss_id += 1
         else: 
             self.boss_id = 1
-        self.recompense_id = random.randint(1, 2) # les IDs des récompenses displonibles
         self.estCommence = True
         self.apparationRate = 0.02 * (self.round * 0.5 + self.niveau)
 
-    def appliquer_recompense(self, recompense_id):
+    def appliquer_recompense(self):
         def max_hp():
             self.vaisseau.maxHp += 15
         def generer_arme():
@@ -381,11 +379,8 @@ class Modele:
             while arme == self.vaisseau.arme:
                 arme = random.choice(["DoubleCannon", "Shotgun"])
             self.vaisseau.arme = arme
-        RECOMPENSES_TYPES = {
-            1: max_hp,
-            2: generer_arme
-        }
-        return RECOMPENSES_TYPES[recompense_id]()
+        max_hp()
+        generer_arme()
 
     def creer_boss(self, boss_id): # génère un boss aléatoire pour le niveau
         BOSS_TYPES = {
