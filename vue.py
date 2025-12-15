@@ -83,16 +83,11 @@ class Vue:
         
     def creer_frame_attribut(self):
         self.frame_attribut = tk.Frame(self.frame_principale, bg="#b03c32")
-        self.frame_attribut.place(x=604, y=270, width=175)
+        self.frame_attribut.place(x=604, y=270, width=225)
 
         self.label_pv = tk.Label(self.frame_attribut, text=f"Pv : {self.modele.vaisseau.hp}", fg="white", bg="#b03c32", font=("Arial", 12))
         self.label_pv.pack(pady=10)
 
-        self.label_niveau = tk.Label(self.frame_attribut, text="Niveaux : 1", fg="white", bg="#b03c32", font=("Arial", 12))
-        self.label_niveau.pack(pady=10)
-
-        self.label_vague = tk.Label(self.frame_attribut, text="Vagues : 1", fg="white", bg="#b03c32", font=("Arial", 12))
-        self.label_vague.pack(pady=10)
         
         self.label_score = tk.Label(self.frame_attribut, text=f"Score : {self.modele.score}", fg="white", bg="#b03c32", font=("Arial", 12))
         self.label_score.pack(pady=10)
