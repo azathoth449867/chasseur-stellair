@@ -52,7 +52,7 @@ class Controleur:
 
     def commence_compteur(self):
         self.modele.pause_compteur()
-        if self.modele.pauseCompteur > 3:
+        if self.modele.pauseCompteur > 1:
                 self.modele.enPause = False
                 self.modele.pauseCompteur = 0
                 self.vue.root.after_cancel(self.modele.chronometre)
