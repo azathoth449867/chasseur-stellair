@@ -585,11 +585,12 @@ class Modele:
             self.enregistrer()
             self.vaisseau = None       
             self.game_over = True
-            return
+            return True
 
     def mise_a_jour(self):
+        if self.verifier_gameover():
+            return
         self.vaisseau.mise_a_jour()
-        self.verifier_gameover()
         self.incrementer_jeu()
         self.verifier_collisions()
         self.vaisseau.deplacer(self.souris_x, self.souris_y)

@@ -284,7 +284,6 @@ class Vue:
             self.canevas.create_oval(r.x - r.taille_x, r.y - r.taille_y, r.x + r.taille_x, r.y + r.taille_y, fill="blue")
 
         # --- Infos ---
-        self.label_vie.config(text=f"Vies : {modele.vaisseau.vie}")
         self.label_niveau.config(text=f"Niveaux : {modele.niveau}")
         self.label_vague.config(text=f"Vagues : {modele.round}")
         self.label_apparationRate.config(text=f"Taux d'apparitions (ovnis) : {modele.apparationRate}")
@@ -292,6 +291,7 @@ class Vue:
             self.label_pv.config(text=f"Pv : {self.modele.vaisseau.hp}")
             self.label_score.config(text=f"Score : {self.modele.score}")
             self.label_bouclier.config(text=f"Bouclier : {self.modele.vaisseau.bouclier}")
+            self.label_vie.config(text=f"Vies : {modele.vaisseau.vie}")
 
     def deplacer_vaisseau(self,evt):
         # on pourrait vouloir le déplacer en y aussi

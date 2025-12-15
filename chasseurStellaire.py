@@ -21,6 +21,8 @@ class Controleur:
         elif self.modele.game_over:
             self.modele.ovnis = []
             self.modele.asteroides = []
+            self.modele.explosion = []
+            self.modele.ressources = []
             self.vue.afficher_jeu()
             self.afficher_intervalle("over")
         else:
