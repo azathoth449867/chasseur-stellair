@@ -330,13 +330,13 @@ class Modele:
             self.conteur_invincibilite += 1 * 0.03
             
         if self.boss == None:
-            if self.frames >= 1:                   # Temp entre chaque vague
+            if self.frames >= 15:                   # Temp entre chaque vague
                 self.frames = 0
                 self.round += 1
                 self.prochaine_round()
         if self.round > 3:
             if self.boss == None:
-                self.boss = self.creer_boss(2)
+                self.boss = self.creer_boss(self.boss_id)
                 self.apparationRate = 0
                 self.obstacleApparationRate = 0
             if self.boss.estVivant == False:
