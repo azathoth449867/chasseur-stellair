@@ -57,7 +57,7 @@ class Beam(Projectile):
     def __init__(self, x, y, typeBullet):
         super().__init__(x, y, typeBullet)
     def mise_a_jour(self):
-        self.taille_y += self.vy * 2
+        self.taille_y += self.vy * 3
 
 class Vaisseau:
     def __init__(self, parent, x, y):
@@ -189,7 +189,7 @@ class Boss:
 
         self.projectiles = [
                     p for p in self.projectiles
-                    if p.y < 700 and p.taille_y < 750 and p.alive
+                    if p.y < 700 and p.taille_y < 900 and p.alive
                 ]
         
     def gunCooldown(self):
@@ -330,13 +330,13 @@ class Modele:
             self.conteur_invincibilite += 1 * 0.03
             
         if self.boss == None:
-            if self.frames >= 15:                   # Temp entre chaque vague
+            if self.frames >= 1:                   # Temp entre chaque vague
                 self.frames = 0
                 self.round += 1
                 self.prochaine_round()
         if self.round > 3:
             if self.boss == None:
-                self.boss = self.creer_boss(self.boss_id)
+                self.boss = self.creer_boss(2)
                 self.apparationRate = 0
                 self.obstacleApparationRate = 0
             if self.boss.estVivant == False:
