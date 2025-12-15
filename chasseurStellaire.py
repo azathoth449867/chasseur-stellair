@@ -5,7 +5,7 @@ class Controleur:
     def __init__(self):
         self.modele = Modele(self,600,800)
         self.vue = Vue(self, self.modele)
-        self.boucle_jeu()
+        # self.boucle_jeu()
         self.vue.root.mainloop()
 
     def boucle_jeu(self):

@@ -301,7 +301,8 @@ class Vue:
         self.controleur.tirer()
 
     def rejouer(self):
-        self.controleur.rejouer()
+        if self.modele.estCommence:
+            self.controleur.rejouer()
 
     # ---------- Affichage des intervalles ----------
 
