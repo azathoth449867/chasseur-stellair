@@ -1,6 +1,5 @@
 from modele import Modele
 from vue import Vue
-from modele import Boss
 
 class Controleur:
     def __init__(self):
