@@ -340,7 +340,7 @@ class Modele:
                 self.apparationRate = 0
                 self.obstacleApparationRate = 0
             if self.boss.estVivant == False:
-                self.score += 10
+                self.score += 100 * self.niveau
                 self.appliquer_recompense(self.recompense_id)
                 self.prochain_niveau()
                     
