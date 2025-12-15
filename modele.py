@@ -217,7 +217,7 @@ class DoubleCannon(Boss):
     
 class Laser(Boss):
     def __init__(self, parent, niveau):
-        super().__init__(parent, 3, 30, 25, 500, niveau)
+        super().__init__(parent, 3, 30, 25, 300, niveau)
         self.nom = "Laser"
         self.maxCooldown = 8
 
@@ -227,7 +227,7 @@ class Laser(Boss):
 
 class Fonceur(Boss):
     def __init__(self, parent, niveau):
-        super().__init__(parent, 6, 25, 20, 500, niveau)
+        super().__init__(parent, 6, 25, 20, 350, niveau)
         self.nom = "Fonceur"
         self.maxCooldown = 12
         self.vy = 7
@@ -302,7 +302,7 @@ class Modele:
         self.chronometre = None
         self.vie = 3
         self.game_over = False
-        self.boss_id = None
+        self.boss_id = 0
         self.recompense_id = None
         self.estCommence = False
         self.explosion = []
@@ -330,7 +330,7 @@ class Modele:
             self.conteur_invincibilite += 1 * 0.03
             
         if self.boss == None:
-            if self.frames >= 15:                   # Temp entre chaque vague
+            if self.frames >= 1:                   # Temp entre chaque vague
                 self.frames = 0
                 self.round += 1
                 self.prochaine_round()
@@ -358,7 +358,6 @@ class Modele:
         self.round = 1
         self.niveau += 1
         self.enPause = True
-        self.boss_id = None
         self.boss_od = None
         self.vaisseau.hp = self.vaisseau.maxHp # vaisseau regagne hp entre niveau
         self.vaisseau.projectiles = []
@@ -366,7 +365,10 @@ class Modele:
         self.definir_niveau()
         
     def definir_niveau(self):
-        self.boss_id = random.randint(1, 3) # les IDs des bosses displonibles
+        if self.boss_id < 3:
+            self.boss_id += 1
+        else: 
+            self.boss_id = 1
         self.recompense_id = random.randint(1, 2) # les IDs des récompenses displonibles
         self.estCommence = True
         self.apparationRate = 0.02 * (self.round * 0.5 + self.niveau)
@@ -440,7 +442,6 @@ class Modele:
                                             p.alive = False
                                         p.appliquer_degat(self.vaisseau)
                                         
-
             #Verifie si projectile vaisseau touche asteroides
             for p in self.vaisseau.projectiles:
                 if p.goodBad == "g":
@@ -585,12 +586,11 @@ class Modele:
             self.enregistrer()
             self.vaisseau = None       
             self.game_over = True
-            return True
+            return
 
     def mise_a_jour(self):
-        if self.verifier_gameover():
-            return
         self.vaisseau.mise_a_jour()
+        self.verifier_gameover()
         self.incrementer_jeu()
         self.verifier_collisions()
         self.vaisseau.deplacer(self.souris_x, self.souris_y)
