@@ -198,7 +198,7 @@ class Boss:
                     self.tirer()
                     self.cooldown = self.maxCooldown
                 self.cooldown -= 1
-        if self.parent.frames >= 15:
+        if self.parent.frames >= 5:
             self.enTire = not self.enTire
             self.parent.frames = 0   
         self.mouvement_projectile()
@@ -329,7 +329,7 @@ class Modele:
             self.conteur_invincibilite += 1 * 0.03
             
         if self.boss == None:
-            if self.frames >= 1:                   # Temp entre chaque vague
+            if self.frames >= 15:                   # Temp entre chaque vague
                 self.frames = 0
                 self.round += 1
                 self.prochaine_round()
