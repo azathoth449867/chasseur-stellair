@@ -11,6 +11,7 @@ class Vue:
         self.creer_frame_canevas()
         self.creer_frame_infos()
         self.creer_frame_attribut()
+        self.creer_frame_tableau_de_score()
 
     # ---------- Création de l'interface ----------
     def creer_fenetre_principale(self):
@@ -50,11 +51,39 @@ class Vue:
         self.btn_rejouer = tk.Button(self.frame_infos, text="Rejouer", command=self.rejouer)
         self.btn_rejouer.pack(pady=10)
         
+        self.btn_tableau_de_score = tk.Button(self.frame_infos, text="Afficher les Scores", command=self.afficher_scores)
+        self.btn_tableau_de_score.pack(pady=10)
+        
         
 
+    def afficher_scores(self):
+        self.frame_principale.pack_forget()
+        self.frame_tableau_de_score.pack(fill="both", expand=True)
+        self.affichage_text.delete("1.0", tk.END)
+        try:
+            with open("log.txt", "r") as file:
+                for ligne in file:
+                    score, niveau, round_ = ligne.strip().split(",")
+                    self.affichage_text.insert(tk.END, f"Score : {score} | Niveau : {niveau} | Round : {round_}\n")
+        except FileNotFoundError:
+            self.affichage_text.insert(tk.END, "Aucun score enregistré.\n")
+            
+    def retour_au_jeu(self):
+        self.frame_tableau_de_score.pack_forget()
+        self.frame_principale.pack()
+        
+    def creer_frame_tableau_de_score(self):
+        self.frame_tableau_de_score = tk.Frame(self.root)
+        self.label_titre = tk.Label(self.frame_tableau_de_score, text="Scores", font=("Arial"), height=10)
+        self.label_titre.pack(pady=10)
+        self.affichage_text = tk.Text(self.frame_tableau_de_score, width=50, height=10)
+        self.affichage_text.pack(padx=10, pady=10)
+        self.btn_retour_au_jeu = tk.Button(self.frame_tableau_de_score, text="Retour au jeu", command=self.retour_au_jeu)
+        self.btn_retour_au_jeu.pack(pady=10)
+        
     def creer_frame_attribut(self):
         self.frame_attribut = tk.Frame(self.frame_principale, bg="#b03c32")
-        self.frame_attribut.place(x=604, y=225, width=175)
+        self.frame_attribut.place(x=604, y=270, width=175)
 
         self.label_pv = tk.Label(self.frame_attribut, text=f"Pv : {self.modele.vaisseau.hp}", fg="white", bg="#b03c32", font=("Arial", 12))
         self.label_pv.pack(pady=10)

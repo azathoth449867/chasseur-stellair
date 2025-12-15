@@ -409,13 +409,13 @@ class Modele:
                     for o in self.ovnis:
                         if (p.x <= o.x + o.taille_x and 
                             p.x >= o.x - o.taille_x):
-                                if p.y - p.taille_y <= o.y + o.taille_y:
+                                if p.y - p.taille_y <= o.y + o.taille_y and p.y + p.taille_y > o.y - o.taille_y:
                                     p.appliquer_degat(o) #hp ovnis - dommage projectile
                                     p.alive = False
                     if self.boss != None:
                         if (p.x <= b.x + b.taille_x and 
                             p.x >= b.x - b.taille_x):
-                                if p.y - p.taille_y <= b.y + b.taille_y:
+                                if p.y - p.taille_y <= b.y + b.taille_y and p.y + p.taille_y > b.y - b.taille_y:
                                     p.appliquer_degat(b)
                                     p.alive = False
 
@@ -447,7 +447,7 @@ class Modele:
                     for a in self.asteroides:
                         if (p.x <= a.x + a.taille_x and 
                             p.x >= a.x - a.taille_x):
-                                if p.y - p.taille_y <= a.y + a.taille_y:
+                                if p.y - p.taille_y <= a.y + a.taille_y and p.y + p.taille_y > a.y - a.taille_y:
                                     p.appliquer_degat(a) #hp asteroides - dommage projectile
                                     p.alive = False
 
