@@ -579,14 +579,17 @@ class Modele:
         for a in self.asteroides:
             if a.hp <= 0:
                 self.explosion.append(Explosion(a.x,a.y, 45))
-
-    def mise_a_jour(self):
-        self.vaisseau.mise_a_jour()
+    
+    def verifier_gameover(self):
         if self.vaisseau.vie == 0:
             self.enregistrer()
             self.vaisseau = None       
             self.game_over = True
             return
+
+    def mise_a_jour(self):
+        self.vaisseau.mise_a_jour()
+        self.verifier_gameover()
         self.incrementer_jeu()
         self.verifier_collisions()
         self.vaisseau.deplacer(self.souris_x, self.souris_y)
