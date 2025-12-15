@@ -39,11 +39,9 @@ class Controleur:
 
     def release(self):
         self.vue.root.after_cancel(self.modele.tire)
-        #self.modele.tire = None
     
     def tirer(self):
         self.modele.tirer()
-        #if self.modele.tire == None:
         self.modele.tire = self.vue.root.after(100, self.tirer)
 
     def rejouer(self):

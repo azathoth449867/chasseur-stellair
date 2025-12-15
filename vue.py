@@ -48,6 +48,9 @@ class Vue:
         self.label_apparationRate = tk.Label(self.frame_infos, text="Taux d'apparitions (ovnis) : 0.02", fg="white", bg="#222", font=("Arial", 12))
         self.label_apparationRate.pack(pady=10)
 
+        self.label_boss_pv = tk.Label(self.frame_infos, text=f"Boss en préparation", fg="white", bg="#b03c32", font=("Arial", 12))
+        self.label_boss_pv.pack(pady=10)
+
         self.btn_rejouer = tk.Button(self.frame_infos, text="Rejouer", command=self.rejouer)
         self.btn_rejouer.pack(pady=10)
         
@@ -83,7 +86,7 @@ class Vue:
         
     def creer_frame_attribut(self):
         self.frame_attribut = tk.Frame(self.frame_principale, bg="#b03c32")
-        self.frame_attribut.place(x=604, y=270, width=225)
+        self.frame_attribut.place(x=604, y=315, width=225)
 
         self.label_pv = tk.Label(self.frame_attribut, text=f"Pv : {self.modele.vaisseau.hp}", fg="white", bg="#b03c32", font=("Arial", 12))
         self.label_pv.pack(pady=10)
@@ -91,6 +94,9 @@ class Vue:
         
         self.label_score = tk.Label(self.frame_attribut, text=f"Score : {self.modele.score}", fg="white", bg="#b03c32", font=("Arial", 12))
         self.label_score.pack(pady=10)
+
+        self.label_arme = tk.Label(self.frame_attribut, text=f"Arme : {self.modele.vaisseau.arme}", fg="white", bg="#b03c32", font=("Arial", 12))
+        self.label_arme.pack(pady=10)
 
         self.label_bouclier = tk.Label(self.frame_attribut, text=f"Bouclier : {self.modele.vaisseau.bouclier}", fg="white", bg="#b03c32", font=("Arial", 12))
         self.label_bouclier.pack(pady=10)
@@ -282,9 +288,14 @@ class Vue:
         self.label_niveau.config(text=f"Niveaux : {modele.niveau}")
         self.label_vague.config(text=f"Vagues : {modele.round}")
         self.label_apparationRate.config(text=f"Taux d'apparitions (ovnis) : {modele.apparationRate}")
+        if b != None:
+            self.label_boss_pv.config(text=f"Boss : {b.hp} PV")
+        else: 
+            self.label_boss_pv.config(text=f"Boss en préparation")
         if(not self.modele.game_over):
             self.label_pv.config(text=f"Pv : {self.modele.vaisseau.hp}")
             self.label_score.config(text=f"Score : {self.modele.score}")
+            self.label_arme.config(text=f"Arme : {self.modele.vaisseau.arme}")
             self.label_bouclier.config(text=f"Bouclier : {self.modele.vaisseau.bouclier}")
             self.label_vie.config(text=f"Vies : {modele.vaisseau.vie}")
 
