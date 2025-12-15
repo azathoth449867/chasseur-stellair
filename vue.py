@@ -39,13 +39,13 @@ class Vue:
         self.label_vie = tk.Label(self.frame_infos, text="Vies : 3", fg="white", bg="#222", font=("Arial", 12))
         self.label_vie.pack(pady=10)
 
-        self.label_niveau = tk.Label(self.frame_infos, text="Niveau : 1", fg="white", bg="#222", font=("Arial", 12))
+        self.label_niveau = tk.Label(self.frame_infos, text="Niveaux : 1", fg="white", bg="#222", font=("Arial", 12))
         self.label_niveau.pack(pady=10)
 
         self.label_vague = tk.Label(self.frame_infos, text="Vagues : 1", fg="white", bg="#222", font=("Arial", 12))
         self.label_vague.pack(pady=10)
 
-        self.label_apparationRate = tk.Label(self.frame_infos, text="Apparation Rate : 0.02", fg="white", bg="#222", font=("Arial", 12))
+        self.label_apparationRate = tk.Label(self.frame_infos, text="Taux d'apparitions (ovnis) : 0.02", fg="white", bg="#222", font=("Arial", 12))
         self.label_apparationRate.pack(pady=10)
 
         self.btn_rejouer = tk.Button(self.frame_infos, text="Rejouer", command=self.rejouer)
@@ -88,7 +88,7 @@ class Vue:
         self.label_pv = tk.Label(self.frame_attribut, text=f"Pv : {self.modele.vaisseau.hp}", fg="white", bg="#b03c32", font=("Arial", 12))
         self.label_pv.pack(pady=10)
 
-        self.label_niveau = tk.Label(self.frame_attribut, text="Niveau : 1", fg="white", bg="#b03c32", font=("Arial", 12))
+        self.label_niveau = tk.Label(self.frame_attribut, text="Niveaux : 1", fg="white", bg="#b03c32", font=("Arial", 12))
         self.label_niveau.pack(pady=10)
 
         self.label_vague = tk.Label(self.frame_attribut, text="Vagues : 1", fg="white", bg="#b03c32", font=("Arial", 12))
@@ -285,9 +285,9 @@ class Vue:
 
         # --- Infos ---
         self.label_vie.config(text=f"Vies : {modele.vaisseau.vie}")
-        self.label_niveau.config(text=f"Niveau : {modele.niveau}")
+        self.label_niveau.config(text=f"Niveaux : {modele.niveau}")
         self.label_vague.config(text=f"Vagues : {modele.round}")
-        self.label_apparationRate.config(text=f"Apparation Rate : {modele.apparationRate}")
+        self.label_apparationRate.config(text=f"Taux d'apparitions (ovnis) : {modele.apparationRate}")
         if(not self.modele.game_over):
             self.label_pv.config(text=f"Pv : {self.modele.vaisseau.hp}")
             self.label_score.config(text=f"Score : {self.modele.score}")
