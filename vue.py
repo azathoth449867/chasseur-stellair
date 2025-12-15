@@ -112,10 +112,10 @@ class Vue:
         if (type == "round"):
                 self.canevas.create_text(300,260,text=f"Round : {self.modele.round}", font=("Arial", 30, "bold"), fill="white")
         if (type == "niveau"):
-            self.canevas.create_text(300,198,text=f"Niveau : {self.modele.niveau}", font=("Arial", 50, "bold"), fill="yellow")
+            self.canevas.create_text(300,198,text=f"Niveau : {self.modele.niveau}", font=("Arial", 50, "bold"), fill="magenta")
         if (type == "over"):
             self.canevas.create_text(300,198,text=f"GAME OVER", font=("Arial", 50, "bold"), fill="red")
-            self.canevas.create_text(300,260,text=f"Niveau : {self.modele.niveau}", font=("Arial", 30, "bold"), fill="yellow")
+            self.canevas.create_text(300,260,text=f"Niveau : {self.modele.niveau}", font=("Arial", 30, "bold"), fill="magenta")
             self.canevas.create_text(300,300,text=f"Round : {self.modele.round}", font=("Arial", 20, "bold"), fill="white")
 
 
@@ -273,8 +273,7 @@ class Vue:
 
         # --- Astéroïdes ---
         for a in modele.asteroides:
-            self.canevas.create_oval(a.x - a.taille_x, a.y - a.taille_y, a.x + a.taille_x, a.y + a.taille_y, fill="grey")
-        
+            self.canevas.create_oval(a.x - a.taille_x, a.y - a.taille_y, a.x + a.taille_x, a.y + a.taille_y, fill="#2B3342", outline="black")
             self.canevas.create_line(a.x, a.y-18, a.x, a.y-12, fill="red", width=3)
             self.canevas.create_line(a.x, a.y+12, a.x, a.y+18, fill="red", width=3)
             self.canevas.create_line(a.x - 18, a.y, a.x-12, a.y, fill="red", width=3)
