@@ -6,7 +6,7 @@ class Vue:
         self.modele = modele
         self.root = tk.Tk()
         self.root.title("Vertical Shooter - MVC")
-
+        self.bg_image = tk.PhotoImage(file="bg.png")
         self.creer_fenetre_principale()
         self.creer_frame_canevas()
         self.creer_frame_infos()
@@ -142,6 +142,9 @@ class Vue:
     def afficher_jeu(self):
         modele = self.modele
         self.canevas.delete("all")
+        
+        # --fond--
+        self.canevas.create_image(0,0, image=self.bg_image, anchor="nw")
 
         # --- Vaisseau du joueur ---
         o = modele.ovnis
