@@ -366,8 +366,8 @@ class Modele:
         self.definir_niveau()
         
     def definir_niveau(self):
-        self.boss_id = random.randint(1, 2) 
-        self.recompense_id = random.randint(1, 2)
+        self.boss_id = random.randint(1, 2, 3) # les IDs des bosses displonibles
+        self.recompense_id = random.randint(1, 2) # les IDs des récompenses displonibles
         self.estCommence = True
         self.apparationRate = 0.02 * (self.round * 0.5 + self.niveau)
 
